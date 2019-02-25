@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/library"
+    android:id="@+id/attendance_container"
+    tools:context=".AdminMenu.Attendance.Show.ShowAttendanteSubjects">
+
+    <include
+        android:id="@+id/include2"
+        layout="@layout/tool_bar" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/subjects_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/include2"
+        android:background="@drawable/library"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/empty_mess_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:background="@drawable/editext_radious_shabe"
+        android:padding="6dp"
+        android:gravity="center"
+        android:text="لا يوجد مواد سجل بها الحضور"
+        android:textColor="@color/dark"
+        android:textSize="20sp" />
+
+</RelativeLayout>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/student_list_container"
+    android:background="@drawable/library"
+    tools:context="com.hasanin.hossam.ro2yacenter.AdminMenu.Students.ShowStudents">
+
+    <include
+        layout="@layout/tool_bar"
+        android:id="@+id/include2" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/students_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/include2"
+        android:background="@drawable/library"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/empty_mess_error_students"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:background="@drawable/editext_radious_shabe"
+        android:padding="6dp"
+        android:gravity="center"
+        android:text="لا يوجد طلاب"
+        android:textColor="@color/dark"
+        android:textSize="20sp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_more_students"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="15dp"
+        android:src="@drawable/ic_add_list"
+        app:backgroundTint="@color/blue_dark"
+        app:fabSize="normal" />
+
+</RelativeLayout>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AdminMenu.Monthly.Store.StoreMonthly">
+
+    <include
+        layout="@layout/tool_bar"
+        android:id="@+id/include2" />
+
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="المواد المتاحة :"
+        android:textSize="28sp"
+        android:layout_below="@+id/include2"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/show_available_subjects"
+        android:layout_below="@+id/header"
+        android:background="@drawable/library" />
+
+</RelativeLayout>

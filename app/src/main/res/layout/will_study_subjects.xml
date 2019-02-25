@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/studing_subjects"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="المواد التي سيدرسها"
+        android:background="@drawable/editext_radious_shabe"
+        android:textSize="20sp"
+        android:padding="6dp"
+        android:drawableLeft="@drawable/ic_exit"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:textColor="@color/black_light"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/wiil_study_subjects_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#edededed" />
+
+</LinearLayout>

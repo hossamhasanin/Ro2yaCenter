@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#ededed">
+
+    <TextView
+        android:id="@+id/get_out"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="أيام المادة"
+        android:background="@drawable/editext_radious_shabe"
+        android:textSize="26sp"
+        android:padding="6dp"
+        android:drawableLeft="@drawable/ic_exit"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/dark"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/dayss_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

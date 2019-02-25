@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/library_2560_1800"
+    tools:context="com.hasanin.hossam.ro2yacenter.AdminMenu.AdminMenuActivity">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/tool_bar"></include>
+
+    <Button
+        android:id="@+id/students_record"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="149dp"
+        android:background="@drawable/button_shape_blue"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="سجل الطلاب"
+        android:textColor="@color/white"
+        android:textSize="36sp"
+        app:layout_constraintHorizontal_bias="0.71"
+        app:layout_constraintLeft_toRightOf="@+id/add_student"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include" />
+
+    <Button
+        android:id="@+id/add_student"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="151dp"
+        android:layout_marginTop="149dp"
+        android:background="@drawable/button_white_rounded_shabe"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="تسجيل طلاب"
+        android:textColor="@color/blue_dark"
+        android:textSize="36sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include" />
+
+    <Button
+        android:id="@+id/store_attendance"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="151dp"
+        android:layout_marginTop="55dp"
+        android:background="@drawable/button_lavender_shape"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="تسجيل الحضور"
+        android:textColor="@color/white"
+        android:textSize="36sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_student" />
+
+    <Button
+        android:id="@+id/attendance_record"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="55dp"
+        android:background="@drawable/button_lavender_rounded_shabe"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="سجل الحضور"
+        android:textColor="@color/lavender_dark"
+        android:textSize="36sp"
+        app:layout_constraintHorizontal_bias="0.687"
+        app:layout_constraintLeft_toRightOf="@+id/store_attendance"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/students_record" />
+
+    <Button
+        android:id="@+id/stored_subjects"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="55dp"
+        android:background="@drawable/button_yellow_shape"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="المواد المسجلة"
+        android:textColor="@color/orange_dark"
+        android:textSize="36sp"
+        app:layout_constraintHorizontal_bias="0.686"
+        app:layout_constraintLeft_toRightOf="@+id/add_subject"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/attendance_record" />
+
+    <Button
+        android:id="@+id/add_subject"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="151dp"
+        android:layout_marginTop="41dp"
+        android:background="@drawable/button_yellow_rounded_shape"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="اضافة مادة"
+        android:textColor="@color/orange_dark"
+        android:textSize="36sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/store_attendance" />
+
+    <Button
+        android:id="@+id/button7"
+        android:layout_width="245dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="55dp"
+        android:background="@drawable/button_red_rounded_shape"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="سجل الشهريات"
+        android:textColor="@color/red_dark"
+        android:textSize="36sp"
+        app:layout_constraintHorizontal_bias="0.687"
+        app:layout_constraintLeft_toRightOf="@+id/add_money"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stored_subjects" />
+
+    <Button
+        android:id="@+id/add_money"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="151dp"
+        android:layout_marginTop="47dp"
+        android:background="@drawable/buttons_red_shabe"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="تسجيل شهريات"
+        android:textColor="@color/white"
+        android:textSize="36sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_subject" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="17dp"
+        android:background="@drawable/button_orange_rounded_shabe"
+        android:padding="15dp"
+        android:text="لوحة الأدارة"
+        android:textAlignment="center"
+        android:textColor="@color/orange_dark"
+        android:textSize="36sp"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include" />
+
+
+</android.support.constraint.ConstraintLayout>

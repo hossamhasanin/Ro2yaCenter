@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/users_container"
+    tools:context=".AdminMenu.Monthly.Store.StoreUsersMonthly">
+
+    <include
+        layout="@layout/tool_bar"
+        android:id="@+id/include2" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/available_users"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/include2"
+        android:background="@drawable/library" />
+
+    <TextView
+        android:id="@+id/empty_mess_error_students"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:background="@drawable/editext_radious_shabe"
+        android:padding="6dp"
+        android:gravity="center"
+        android:text="لا يوجد طلاب"
+        android:textColor="@color/dark"
+        android:textSize="20sp"
+        android:visibility="gone"/>
+
+</RelativeLayout>

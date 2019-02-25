@@ -1,0 +1,16 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/blue_light</item>
+        <item name="colorPrimaryDark">@color/blue_center</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:typeface">serif</item>
+    </style>
+    <style name="AppTheme.editTextStyleLight" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/editext_radious_shabe</item>
+        <item name="android:textColor">@color/dark</item>
+    </style>
+
+</resources>

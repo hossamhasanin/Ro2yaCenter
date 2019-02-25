@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/library"
+    android:orientation="vertical"
+    tools:context=".AdminMenu.Students.AddStudent">
+
+    <include
+        android:id="@+id/include4"
+        layout="@layout/tool_bar"></include>
+
+            <EditText
+                android:id="@+id/student_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/edittext_radious_rounded_shape"
+                android:ems="10"
+                android:hint="اسم الطالب"
+                android:inputType="textPersonName"
+                android:padding="10dp"
+                android:textAlignment="textStart"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/generated_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="999alsdkls"
+                android:background="@drawable/editext_radious_shabe"
+                android:textSize="26sp"
+                android:padding="6dp"
+                android:gravity="center"
+                android:drawableLeft="@drawable/ic_refresh_black"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:textColor="@color/dark"/>
+
+
+            <TextView
+                android:id="@+id/studing_subjects"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="المواد التي سيدرسها"
+                android:background="@drawable/editext_radious_shabe"
+                android:textSize="26sp"
+                android:padding="6dp"
+                android:drawableLeft="@drawable/ic_backword_arrow"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:textColor="@color/dark"/>
+
+            <Button
+                android:id="@+id/student_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_shape_blue"
+                android:fontFamily="serif"
+                android:text="حفظ"
+                android:textColor="@color/white"
+                android:textSize="26sp"
+                android:layout_gravity="center"
+                android:drawableRight="@drawable/ic_done"/>
+
+</LinearLayout>
+

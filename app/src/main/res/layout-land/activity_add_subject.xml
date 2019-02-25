@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/library_2560_1800"
+    android:orientation="vertical"
+    tools:context="com.hasanin.hossam.ro2yacenter.AdminMenu.Subjects.AddSubject">
+
+    <include
+        android:id="@+id/include4"
+        layout="@layout/tool_bar"></include>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/include4">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/include4">
+            <EditText
+                android:id="@+id/subject_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/edittext_radious_rounded_shape"
+                android:ems="10"
+                android:hint="اسم المادة"
+                android:inputType="textPersonName"
+                android:padding="10dp"
+                android:textAlignment="textStart"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/money"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/edittext_radious_rounded_shape"
+                android:ems="10"
+                android:hint="الشهرية"
+                android:inputType="textPersonName"
+                android:padding="10dp"
+                android:textAlignment="textStart"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/teacher_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/edittext_radious_rounded_shape"
+                android:ems="10"
+                android:hint="اسم المدرس"
+                android:inputType="textPersonName"
+                android:padding="10dp"
+                android:textAlignment="textStart"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/edittext_radious_rounded_shape"
+                android:ems="10"
+                android:hint="المعاد"
+                android:inputType="textPersonName"
+                android:padding="10dp"
+                android:textAlignment="textStart"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/days"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="أيام المادة"
+                android:background="@drawable/editext_radious_shabe"
+                android:textSize="20sp"
+                android:padding="6dp"
+                android:drawableLeft="@drawable/ic_backword_arrow"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:textColor="@color/dark"/>
+
+    <Button
+        android:id="@+id/subject_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_shape_blue"
+        android:fontFamily="serif"
+        android:text="حفظ"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:layout_gravity="center"
+        android:drawableRight="@drawable/ic_done"/>
+
+    </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

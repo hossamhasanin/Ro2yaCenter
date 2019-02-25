@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "591481891620",
+    "firebase_url": "https://ro2yacenter-98920.firebaseio.com",
+    "project_id": "ro2yacenter-98920",
+    "storage_bucket": "ro2yacenter-98920.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:591481891620:android:27d12a95dda480f7",
+        "android_client_info": {
+          "package_name": "com.hasanin.hossam.ro2yacenter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "591481891620-k1sq7e0nbbi18dad48ot80gqjkseugam.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hasanin.hossam.ro2yacenter",
+            "certificate_hash": "7520bb4d0a6e38e2f870f95a0a6e42c4c307dc6b"
+          }
+        },
+        {
+          "client_id": "591481891620-crdp94hn273uven1qlhrtff48dknj955.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWsavrH-_uV6q8lcMxUDfn4GuzU0Z7LuE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "591481891620-crdp94hn273uven1qlhrtff48dknj955.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

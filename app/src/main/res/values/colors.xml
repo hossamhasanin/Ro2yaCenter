@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="white">#FFF</color>
+    <color name="dark">#000000</color>
+    <color name="green_dark">#02c605</color>
+    <color name="green_center">#45ef56</color>
+    <color name="green_light">#42f53f</color>
+    <color name="green_flat_dark">#18c629</color>
+    <color name="green_flat_center">#1bcc2b</color>
+    <color name="green_flat_light">#1cd92e</color>
+    <color name="red_dark">#c10606</color>
+    <color name="red_center">#e62727</color>
+    <color name="red_light">#f24141</color>
+    <color name="red_flat_dark">#c70c16</color>
+    <color name="red_flat_center">#d40d17</color>
+    <color name="red_flat_light">#dc0f19</color>
+    <color name="blue_dark">#1a53c4</color>
+    <color name="blue_center">#2e62c2</color>
+    <color name="blue_light">#4d9ee6</color>
+    <color name="lavender_dark">#5e049b</color>
+    <color name="lavender_center">#8025be</color>
+    <color name="lavender_light">#8e1dda</color>
+    <color name="yellow_dark">#e9cf0b</color>
+    <color name="yellow_center">#f7f715</color>
+    <color name="yellow_light">#f2f736</color>
+    <color name="orange_dark">#d95503</color>
+    <color name="orange_center">#e16b21</color>
+    <color name="orange_light">#ec7c37</color>
+    <color name="black">#000000</color>
+    <color name="black_center">#3b3b3b</color>
+    <color name="black_light">#646464</color>
+    <color name="brwon_light">#d9986b</color>
+</resources>
