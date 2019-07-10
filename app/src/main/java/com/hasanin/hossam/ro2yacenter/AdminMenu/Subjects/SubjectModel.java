@@ -12,17 +12,26 @@ public class SubjectModel {
     public String subjectTeacher;
     public ArrayList<String> subjectDays;
     public String subjecMoney;
-    public String subjectTime;
+    public String subjectTime , studyGrade;
 
     public  SubjectModel(){}
 
-    public SubjectModel(String subjectId , String subjectName, String subjectTeacher, ArrayList<String> subjectDays, String subjecMoney, String subjectTime) {
+    public SubjectModel(String subjectId, String subjectName, String subjectTeacher, ArrayList<String> subjectDays, String subjecMoney, String subjectTime, String studyGrade) {
         this.subjectId = subjectId;
         this.subjectName = subjectName;
         this.subjectTeacher = subjectTeacher;
         this.subjectDays = subjectDays;
         this.subjecMoney = subjecMoney;
         this.subjectTime = subjectTime;
+        this.studyGrade = studyGrade;
+    }
+
+    public String getStudyGrade() {
+        return studyGrade;
+    }
+
+    public void setStudyGrade(String studyGrade) {
+        this.studyGrade = studyGrade;
     }
 
     public void setSubjectId(String subjectId) {

@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,10 +44,12 @@ public class SubjectsRecAdapter extends FirebaseRecyclerAdapter<SubjectModel , S
      *
      * @param options
      */
-    public Activity context;
-    public SubjectsRecAdapter(@NonNull FirebaseRecyclerOptions<SubjectModel> options , Activity context) {
+    public ShowSubjects context;
+    String selectedGrade;
+    public SubjectsRecAdapter(@NonNull FirebaseRecyclerOptions<SubjectModel> options , ShowSubjects context , String selectedGrade) {
         super(options);
         this.context = context;
+        this.selectedGrade = selectedGrade;
     }
 
     @NonNull
@@ -61,89 +64,96 @@ public class SubjectsRecAdapter extends FirebaseRecyclerAdapter<SubjectModel , S
 
     @Override
     protected void onBindViewHolder(@NonNull final SubjectHolder holder, final int position, @NonNull final SubjectModel model) {
-        holder.subjectName.setText(model.getSubjectName());
-        holder.subjectName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                android.support.v7.app.AlertDialog.Builder popupmess = new android.support.v7.app.AlertDialog.Builder(context);
-                View poplayout = LayoutInflater.from(context).inflate(R.layout.subject_info , null);
-                popupmess.setView(poplayout);
-                final android.support.v7.app.AlertDialog ad = popupmess.show();
-                TextView subjectTeacher = (TextView) poplayout.findViewById(R.id.show_teachername);
-                final TextView subjectDays = (TextView) poplayout.findViewById(R.id.show_days);
-                TextView subjectMoney = (TextView) poplayout.findViewById(R.id.show_money);
-                TextView subjectTime = (TextView) poplayout.findViewById(R.id.show_time);
-                Button editSubject = (Button) poplayout.findViewById(R.id.edit_subject);
-                Button deleteSubject = (Button) poplayout.findViewById(R.id.delete_subject);
+        if (model.getStudyGrade().contains(selectedGrade)) {
+            holder.subjectName.setText(model.getSubjectName());
+            holder.subjectName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    android.support.v7.app.AlertDialog.Builder popupmess = new android.support.v7.app.AlertDialog.Builder(context);
+                    View poplayout = LayoutInflater.from(context).inflate(R.layout.subject_info, null);
+                    popupmess.setView(poplayout);
+                    final android.support.v7.app.AlertDialog ad = popupmess.show();
+                    TextView subjectTeacher = (TextView) poplayout.findViewById(R.id.show_teachername);
+                    final TextView subjectDays = (TextView) poplayout.findViewById(R.id.show_days);
+                    TextView subjectMoney = (TextView) poplayout.findViewById(R.id.show_money);
+                    TextView subjectTime = (TextView) poplayout.findViewById(R.id.show_time);
+                    TextView studentGrade = (TextView) poplayout.findViewById(R.id.sub_show_grade_status);
+                    Button editSubject = (Button) poplayout.findViewById(R.id.edit_subject);
+                    Button deleteSubject = (Button) poplayout.findViewById(R.id.delete_subject);
 
-                subjectTeacher.setText(model.getSubjectTeacher());
-                subjectDays.setText(TextUtils.join(" , " , model.getSubjectDays()));
-                subjectMoney.setText(model.getSubjecMoney());
-                subjectTime.setText(model.getSubjectTime());
-                editSubject.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ad.dismiss();
-                        Intent intent = new Intent(context , AddSubject.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putBoolean("editMode" , true);
-                        bundle.putString("subjectId" , model.getSubjectId());
-                        bundle.putString("subjectName" , model.getSubjectName());
-                        bundle.putString("teacherName" , model.getSubjectTeacher());
-                        bundle.putString("money" , model.getSubjecMoney());
-                        bundle.putString("time" , model.getSubjectTime());
-                        bundle.putStringArrayList("checkedDays" , model.getSubjectDays());
-                        intent.putExtras(bundle);
-                        context.startActivity(intent);
-                    }
-                });
-                deleteSubject.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ad.dismiss();
-                        AlertDialog.Builder al = AlertMessage(context , "هل انت متأكد تريد حذف تلك المادة ؟" , "حذف المادة ؟" , R.drawable.ic_delete);
-                        al.setPositiveButton("نعم", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-                                reference.child("subjects").child(model.getSubjectId()).removeValue();
-                                final ProgressDialog progressDialog = new ProgressDialog(context);
-                                progressDialog.setMessage("جاري المسح ...");
-                                progressDialog.show();
-                                reference.child("members").addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                                            ArrayList<String> subjects = snapshot.getValue(StudentModel.class).getSubjects();
-                                            if (subjects != null && !subjects.isEmpty()) {
-                                                subjects.remove(model.getSubjectName());
-                                                reference.child("members").child(snapshot.getKey()).child("subjects").removeValue();
-                                                reference.child("members").child(snapshot.getKey()).child("subjects").setValue(subjects);
+                    studentGrade.setText(model.getStudyGrade());
+                    subjectTeacher.setText(model.getSubjectTeacher());
+                    subjectDays.setText(TextUtils.join(" , ", model.getSubjectDays()));
+                    subjectMoney.setText(model.getSubjecMoney());
+                    subjectTime.setText(model.getSubjectTime());
+                    editSubject.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ad.dismiss();
+                            Intent intent = new Intent(context, AddSubject.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putBoolean("editMode", true);
+                            bundle.putString("subjectId", model.getSubjectId());
+                            bundle.putString("subjectName", model.getSubjectName());
+                            bundle.putString("teacherName", model.getSubjectTeacher());
+                            bundle.putString("money", model.getSubjecMoney());
+                            bundle.putString("time", model.getSubjectTime());
+                            bundle.putString("gradeStatus", model.getStudyGrade());
+                            bundle.putStringArrayList("checkedDays", model.getSubjectDays());
+                            intent.putExtras(bundle);
+                            context.startActivity(intent);
+                        }
+                    });
+                    deleteSubject.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ad.dismiss();
+                            AlertDialog.Builder al = AlertMessage(context, "هل انت متأكد تريد حذف تلك المادة ؟", "حذف المادة ؟", R.drawable.ic_delete);
+                            al.setPositiveButton("نعم", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+                                    reference.child("subjects").child(model.getSubjectId()).removeValue();
+                                    final ProgressDialog progressDialog = new ProgressDialog(context);
+                                    progressDialog.setMessage("جاري المسح ...");
+                                    progressDialog.show();
+                                    reference.child("members").addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                                ArrayList<String> subjects = snapshot.getValue(StudentModel.class).getSubjects();
+                                                if (subjects != null && !subjects.isEmpty()) {
+                                                    subjects.remove(model.getSubjectName());
+                                                    reference.child("members").child(snapshot.getKey()).child("subjects").removeValue();
+                                                    reference.child("members").child(snapshot.getKey()).child("subjects").setValue(subjects);
+                                                }
                                             }
                                         }
-                                    }
 
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                    }
-                                });
-                                reference.child("attendance").child(model.getSubjectName()).removeValue();
-                                reference.child("monthly").child(model.getSubjectName()).removeValue();
-                            }
-                        });
-                        al.setNegativeButton("لا", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                                        }
+                                    });
+                                    reference.child("attendance").child(model.getSubjectName()).removeValue();
+                                    reference.child("monthly").child(model.getSubjectName()).removeValue();
+                                }
+                            });
+                            al.setNegativeButton("لا", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
 
-                            }
-                        });
-                        al.show();
-                    }
-                });
+                                }
+                            });
+                            al.show();
+                        }
+                    });
 
-            }
-        });
+                }
+            });
+        } else {
+            holder.container.setVisibility(View.GONE);
+        }
 
     }
 
@@ -156,9 +166,11 @@ public class SubjectsRecAdapter extends FirebaseRecyclerAdapter<SubjectModel , S
     public static class SubjectHolder extends RecyclerView.ViewHolder{
 
         public TextView subjectName;
+        LinearLayout container;
         public SubjectHolder(View itemView) {
             super(itemView);
             subjectName = (TextView) itemView.findViewById(R.id.subject);
+            container = itemView.findViewById(R.id.subject_container);
         }
     }
 }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class StudentModel {
 
-    public String code;
+    public String code , studyGrade;
     public boolean isadmin;
     public ArrayList<String> subjects;
     public String name;
@@ -12,13 +12,21 @@ public class StudentModel {
 
     public StudentModel(){}
 
-    public StudentModel(boolean isadmin, ArrayList<String> subjects, String name, long last_login , String code) {
-
+    public StudentModel(String code, String studyGrade, boolean isadmin, ArrayList<String> subjects, String name, Long last_login) {
         this.code = code;
+        this.studyGrade = studyGrade;
         this.isadmin = isadmin;
         this.subjects = subjects;
         this.name = name;
         this.last_login = last_login;
+    }
+
+    public String getStudyGrade() {
+        return studyGrade;
+    }
+
+    public void setStudyGrade(String studyGrade) {
+        this.studyGrade = studyGrade;
     }
 
     public String getCode() {

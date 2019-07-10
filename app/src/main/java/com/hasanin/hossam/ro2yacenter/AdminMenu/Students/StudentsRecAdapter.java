@@ -47,10 +47,11 @@ public class StudentsRecAdapter extends FirebaseRecyclerAdapter<StudentModel , S
     DatabaseReference attendance;
     DatabaseReference monthly;
     ArrayList<StudentModel> checked;
+    String selectedGrade;
 
 
 
-    public StudentsRecAdapter(@NonNull FirebaseRecyclerOptions<StudentModel> options , ShowStudents context) {
+    public StudentsRecAdapter(@NonNull FirebaseRecyclerOptions<StudentModel> options , ShowStudents context , String selectedGrade) {
         super(options);
         this.context = context;
         this.databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -58,6 +59,8 @@ public class StudentsRecAdapter extends FirebaseRecyclerAdapter<StudentModel , S
         this.attendance = databaseReference.child("attendance");
         this.monthly = databaseReference.child("monthly");
         this.checked = new ArrayList<StudentModel>();
+        this.selectedGrade = selectedGrade;
+
     }
 
     public void setSearchQuery(String searchQuery){
@@ -80,7 +83,7 @@ public class StudentsRecAdapter extends FirebaseRecyclerAdapter<StudentModel , S
             s.add("empty");
             model.setSubjects(s);
         }
-        if (!model.isIsadmin() && model.getSubjects().get(0) != "none") {
+        if (!model.isIsadmin() && !model.getSubjects().get(0).equals("none") && model.getStudyGrade().equals(selectedGrade)) {
             holder.studentName.setText(model.getName());
             holder.studentName.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -94,9 +97,21 @@ public class StudentsRecAdapter extends FirebaseRecyclerAdapter<StudentModel , S
                         TextView studentName = (TextView) poplayout.findViewById(R.id.show_studentname);
                         TextView studentCode = (TextView) poplayout.findViewById(R.id.show_code);
                         final TextView studentSubjects = (TextView) poplayout.findViewById(R.id.show_subjects);
+                        TextView studentGrade = (TextView) poplayout.findViewById(R.id.show_grade_status);
                         Button editStudent = (Button) poplayout.findViewById(R.id.edit_student);
                         Button deleteStudent = (Button) poplayout.findViewById(R.id.delete_student);
 
+                        switch (model.getStudyGrade()) {
+                            case "1":
+                                studentGrade.setText("الصف الاول الثانوي");
+                                break;
+                            case "2":
+                                studentGrade.setText("الصف الثاني الثانوي");
+                                break;
+                            case "3":
+                                studentGrade.setText("الصف الثالث الثانوي");
+                                break;
+                        }
                         studentName.setText(model.getName());
                         studentCode.setText(model.getCode());
                         if (!model.getSubjects().get(0).equals("empty")) {
@@ -113,6 +128,7 @@ public class StudentsRecAdapter extends FirebaseRecyclerAdapter<StudentModel , S
                                 bundle.putBoolean("editMode", true);
                                 bundle.putString("studentName", model.getName());
                                 bundle.putString("code", model.getCode());
+                                bundle.putString("gradeStatus", model.getStudyGrade());
                                 bundle.putStringArrayList("checkedSubjects", model.getSubjects());
                                 intent.putExtras(bundle);
                                 context.startActivity(intent);

@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
@@ -19,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +50,7 @@ public class ShowStudents extends AppCompatActivity {
     FloatingActionButton addMoreStudents;
     FloatingActionButton deleteAll;
     FloatingActionButton close;
+    Button firstGrade , thirdGrade , secondGrade;
     TextView emptyMessError;
     RelativeLayout studentListContainer;
     FirebaseRecyclerOptions<StudentModel> firebaseRecyclerOptions;
@@ -66,6 +69,7 @@ public class ShowStudents extends AppCompatActivity {
                     }
                 }
             };
+    String selectedGrade = "1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +108,7 @@ public class ShowStudents extends AppCompatActivity {
         firebaseRecyclerOptions =
                 new FirebaseRecyclerOptions.Builder<StudentModel>().setQuery(query , StudentModel.class).build();
 
-        studentsRecAdapter = new StudentsRecAdapter(firebaseRecyclerOptions , this);
+        studentsRecAdapter = new StudentsRecAdapter(firebaseRecyclerOptions , this , selectedGrade);
           studentsList = (RecyclerView) findViewById(R.id.students_list);
         studentsList.setAdapter(studentsRecAdapter);
         studentsList.setLayoutManager(new LinearLayoutManager(this));
@@ -125,6 +129,72 @@ public class ShowStudents extends AppCompatActivity {
                 finish();
             }
         });
+
+        firstGrade = findViewById(R.id.show_first_grade);
+        secondGrade = findViewById(R.id.show_second_grade);
+        thirdGrade = findViewById(R.id.show_third_grade);
+
+        firstGrade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedGrade = "1";
+                studentsRecAdapter.stopListening();
+                studentsRecAdapter = null;
+                studentsRecAdapter = new StudentsRecAdapter(firebaseRecyclerOptions , activity , selectedGrade);
+                studentsList.setLayoutManager(new LinearLayoutManager(activity));
+                studentsList.setAdapter(studentsRecAdapter);
+                studentsRecAdapter.startListening();
+
+                firstGrade.setBackground(ContextCompat.getDrawable(activity , R.drawable.button_white_rounded_shabe));
+                firstGrade.setTextColor(Color.BLACK);
+                secondGrade.setBackground(ContextCompat.getDrawable(activity , R.drawable.button_shape_blue));
+                secondGrade.setTextColor(Color.WHITE);
+                thirdGrade.setBackground(ContextCompat.getDrawable(activity , R.drawable.button_shape_blue));
+                thirdGrade.setTextColor(Color.WHITE);
+            }
+        });
+
+        secondGrade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedGrade = "2";
+                studentsRecAdapter.stopListening();
+                studentsRecAdapter = null;
+                studentsRecAdapter = new StudentsRecAdapter(firebaseRecyclerOptions , activity , selectedGrade);
+                studentsList.setLayoutManager(new LinearLayoutManager(activity));
+                studentsList.setAdapter(studentsRecAdapter);
+                studentsRecAdapter.startListening();
+
+                firstGrade.setBackground(ContextCompat.getDrawable(activity , R.drawable.button_shape_blue));
+                firstGrade.setTextColor(Color.WHITE);
+                secondGrade.setBackground(ContextCompat.getDrawable(activity , R.drawable.button_white_rounded_shabe));
+                secondGrade.setTextColor(Color.BLACK);
+                thirdGrade.setBackground(ContextCompat.getDrawable(activity , R.drawable.button_shape_blue));
+                thirdGrade.setTextColor(Color.WHITE);
+            }
+        });
+
+
+        thirdGrade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedGrade = "3";
+                studentsRecAdapter.stopListening();
+                studentsRecAdapter = null;
+                studentsRecAdapter = new StudentsRecAdapter(firebaseRecyclerOptions , activity , selectedGrade);
+                studentsList.setLayoutManager(new LinearLayoutManager(activity));
+                studentsList.setAdapter(studentsRecAdapter);
+                studentsRecAdapter.startListening();
+
+                firstGrade.setBackground(ContextCompat.getDrawable(activity , R.drawable.button_shape_blue));
+                firstGrade.setTextColor(Color.WHITE);
+                secondGrade.setBackground(ContextCompat.getDrawable(activity , R.drawable.button_shape_blue));
+                secondGrade.setTextColor(Color.WHITE);
+                thirdGrade.setBackground(ContextCompat.getDrawable(activity , R.drawable.button_white_rounded_shabe));
+                thirdGrade.setTextColor(Color.BLACK);
+            }
+        });
+
 
         deleteAll = (FloatingActionButton) findViewById(R.id.delete_all_students);
         close = (FloatingActionButton) findViewById(R.id.close);
@@ -179,7 +249,7 @@ public class ShowStudents extends AppCompatActivity {
                 studentsRecAdapter.checked.clear();
                 studentsRecAdapter.stopListening();
                 studentsRecAdapter = null;
-                studentsRecAdapter = new StudentsRecAdapter(firebaseRecyclerOptions , activity);
+                studentsRecAdapter = new StudentsRecAdapter(firebaseRecyclerOptions , activity , selectedGrade);
                 studentsList.setLayoutManager(new LinearLayoutManager(activity));
                 studentsList.setAdapter(studentsRecAdapter);
                 studentsRecAdapter.startListening();
@@ -232,7 +302,7 @@ public class ShowStudents extends AppCompatActivity {
                     Query searchQueary = query.orderByChild("name").startAt(searchText).endAt(searchText + "\uf8ff");
                     firebaseRecyclerOptions =
                             new FirebaseRecyclerOptions.Builder<StudentModel>().setQuery(searchQueary , StudentModel.class).build();
-                    studentsRecAdapter = new StudentsRecAdapter(firebaseRecyclerOptions , activity);
+                    studentsRecAdapter = new StudentsRecAdapter(firebaseRecyclerOptions , activity , selectedGrade);
                     studentsList.setLayoutManager(new LinearLayoutManager(activity));
                     studentsList.setAdapter(studentsRecAdapter);
                     studentsRecAdapter.startListening();
@@ -249,7 +319,7 @@ public class ShowStudents extends AppCompatActivity {
                     studentsRecAdapter = null;
                     firebaseRecyclerOptions =
                             new FirebaseRecyclerOptions.Builder<StudentModel>().setQuery(query , StudentModel.class).build();
-                    studentsRecAdapter = new StudentsRecAdapter(firebaseRecyclerOptions , activity);
+                    studentsRecAdapter = new StudentsRecAdapter(firebaseRecyclerOptions , activity , selectedGrade);
                     studentsList.setLayoutManager(new LinearLayoutManager(activity));
                     studentsList.setAdapter(studentsRecAdapter);
                     studentsRecAdapter.startListening();

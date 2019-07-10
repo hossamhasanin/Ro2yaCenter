@@ -17,7 +17,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +46,9 @@ public class AddStudent extends AppCompatActivity {
     EditText studentName;
     TextView studentCode , willStudySubjects;
     Button studentSave;
+    RadioButton firstGrade;
+    RadioButton secondGrade;
+    RadioButton thirdGrade;
     ArrayList<String> checkedSubjects;
     Bundle bundle;
     WillStudySubjectsAdabter willStudySubjectsAdabter;
@@ -51,6 +57,7 @@ public class AddStudent extends AppCompatActivity {
     private static final String NUMERIC = "0123456789";
     public static SecureRandom random = new SecureRandom();
     String generatedCode;
+    String gradeStatus;
 
 
     @Override
@@ -72,11 +79,25 @@ public class AddStudent extends AppCompatActivity {
         studentCode = (TextView) findViewById(R.id.generated_code);
         willStudySubjects = (TextView) findViewById(R.id.studing_subjects);
         studentSave = (Button) findViewById(R.id.student_save);
+        firstGrade = findViewById(R.id.first_grade);
+        secondGrade = findViewById(R.id.second_grade);
+        thirdGrade = findViewById(R.id.third_grade);
+
+        gradeStatus = "";
+
 
         generatedCode = "";
         checkedSubjects = new ArrayList<String>();
         if (bundle.getBoolean("editMode")){
             generatedCode = bundle.getString("code");
+            gradeStatus = bundle.getString("gradeStatus");
+            if (gradeStatus.equals("1")){
+                firstGrade.setChecked(true);
+            } else if (gradeStatus.equals("2")){
+                secondGrade.setChecked(true);
+            } else if (gradeStatus.equals("3")) {
+                thirdGrade.setChecked(true);
+            }
             studentName.setText(bundle.getString("studentName"));
             checkedSubjects = bundle.getStringArrayList("checkedSubjects");
         } else {
@@ -87,11 +108,12 @@ public class AddStudent extends AppCompatActivity {
         query.keepSynced(true);
         FirebaseRecyclerOptions<SubjectModel> firebaseRecyclerOptions =
                 new FirebaseRecyclerOptions.Builder<SubjectModel>().setQuery(query , SubjectModel.class).build();
-        willStudySubjectsAdabter = new WillStudySubjectsAdabter(firebaseRecyclerOptions , context , checkedSubjects);
+        willStudySubjectsAdabter = new WillStudySubjectsAdabter(firebaseRecyclerOptions , context , checkedSubjects , gradeStatus);
 
         willStudySubjects.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                willStudySubjectsAdabter.selectedGrade = gradeStatus;
                 AlertDialog.Builder popupmess = new AlertDialog.Builder(context);
                 View poplayout = LayoutInflater.from(context).inflate(R.layout.will_study_subjects , null);
                 popupmess.setView(poplayout);
@@ -124,6 +146,31 @@ public class AddStudent extends AppCompatActivity {
             }
         });
 
+        firstGrade.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    gradeStatus = "1";
+                }
+            }
+        });
+        secondGrade.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    gradeStatus = "2";
+                }
+            }
+        });
+        thirdGrade.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    gradeStatus = "3";
+                }
+            }
+        });
+
         studentSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,8 +179,21 @@ public class AddStudent extends AppCompatActivity {
                         checkedSubjects.remove("empty");
                     }
                     if (fildesCheck(context, studentName.getText().toString(), checkedSubjects)) {
+                        if (firstGrade.isChecked()){
+                            gradeStatus = "1";
+                        } else if (secondGrade.isChecked()){
+                            gradeStatus = "2";
+                        } else if (thirdGrade.isChecked()){
+                            gradeStatus = "3";
+                        }
                         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("members");
-                        StudentModel studentModel = new StudentModel(false, checkedSubjects, studentName.getText().toString(), 0, generatedCode);
+                        StudentModel studentModel = new StudentModel();
+                        studentModel.setCode(generatedCode);
+                        studentModel.setIsadmin(false);
+                        studentModel.setSubjects(checkedSubjects);
+                        studentModel.setName(studentName.getText().toString());
+                        studentModel.setLast_login((long) 0);
+                        studentModel.setStudyGrade(gradeStatus);
                         databaseReference.child(generatedCode).setValue(studentModel).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -162,9 +222,12 @@ public class AddStudent extends AppCompatActivity {
             //Toast.makeText(context , "لا تترك اسم الطالب فارغا" , Toast.LENGTH_LONG).show();
             Snackbar.make(findViewById(android.R.id.content) , "لا تترك اسم الطالب فارغا !"  , Snackbar.LENGTH_LONG).show();
             return false;
-        } else if(checkedSubjects.isEmpty()){
+        } else if(checkedSubjects.isEmpty()) {
             //Toast.makeText(context , "لا تترك المواد التي سيدرسها فارغة" , Toast.LENGTH_LONG).show();
-            Snackbar.make(findViewById(android.R.id.content) , "لا تترك المواد التي سيدرسها فارغة !"  , Snackbar.LENGTH_LONG).show();
+            Snackbar.make(findViewById(android.R.id.content), "لا تترك المواد التي سيدرسها فارغة !", Snackbar.LENGTH_LONG).show();
+            return false;
+        } else if (!firstGrade.isChecked() && !secondGrade.isChecked() && !thirdGrade.isChecked()){
+            Snackbar.make(findViewById(android.R.id.content), "مهو انت لازم تختارلو صف دراسي الاول !", Snackbar.LENGTH_LONG).show();
             return false;
         } else {
             return true;

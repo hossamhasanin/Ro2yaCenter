@@ -93,6 +93,40 @@
                 android:textAlignment="textStart"
                 android:textSize="24sp" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/editext_radious_shabe"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:padding="5dp">
+                <CheckBox
+                    android:id="@+id/sub_first_grade"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="الصف الاول الثانوي"
+                    android:textColor="#000"
+                    android:textSize="18sp" />
+                <CheckBox
+                    android:id="@+id/sub_second_grade"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="الصف الثاني الثانوي"
+                    android:textColor="#000"
+                    android:textSize="18sp" />
+                <CheckBox
+                    android:id="@+id/sub_third_grade"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="الصف الثالث الثانوي"
+                    android:textColor="#000"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+
             <TextView
                 android:id="@+id/days"
                 android:layout_width="match_parent"

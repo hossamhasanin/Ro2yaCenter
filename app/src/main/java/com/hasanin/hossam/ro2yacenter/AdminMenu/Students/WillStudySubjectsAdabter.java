@@ -29,10 +29,12 @@ public class WillStudySubjectsAdabter extends FirebaseRecyclerAdapter<SubjectMod
 
     public ArrayList<String> checkedSubjects;
     public Context context;
-    public WillStudySubjectsAdabter(@NonNull FirebaseRecyclerOptions<SubjectModel> options , Context context , ArrayList<String> checkedSubjects) {
+    String selectedGrade;
+    public WillStudySubjectsAdabter(@NonNull FirebaseRecyclerOptions<SubjectModel> options , Context context , ArrayList<String> checkedSubjects , String selectedGrade) {
         super(options);
         this.checkedSubjects = checkedSubjects;
         this.context = context;
+        this.selectedGrade = selectedGrade;
     }
 
     @NonNull
@@ -45,35 +47,39 @@ public class WillStudySubjectsAdabter extends FirebaseRecyclerAdapter<SubjectMod
 
     @Override
     protected void onBindViewHolder(@NonNull final WillStudyHolder holder, int position, @NonNull final SubjectModel model) {
-        if (!this.checkedSubjects.isEmpty()){
-            for (int i=0;i<checkedSubjects.size();i++){
-                if (checkedSubjects.get(i).equals(model.getSubjectName())){
-                    holder.checkSubject.setChecked(true);
-                    break;
+        if (model.getStudyGrade().contains(selectedGrade)) {
+            if (!this.checkedSubjects.isEmpty()) {
+                for (int i = 0; i < checkedSubjects.size(); i++) {
+                    if (checkedSubjects.get(i).equals(model.getSubjectName())) {
+                        holder.checkSubject.setChecked(true);
+                        break;
+                    }
                 }
             }
+            holder.subjectName.setText(model.getSubjectName());
+            holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (holder.checkSubject.isChecked()) {
+                        holder.checkSubject.setChecked(false);
+                    } else {
+                        holder.checkSubject.setChecked(true);
+                    }
+                }
+            });
+            holder.checkSubject.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        checkedSubjects.add(model.getSubjectName());
+                    } else {
+                        checkedSubjects.remove(model.getSubjectName());
+                    }
+                }
+            });
+        } else {
+            holder.linearLayout.setVisibility(View.GONE);
         }
-        holder.subjectName.setText(model.getSubjectName());
-        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (holder.checkSubject.isChecked()){
-                    holder.checkSubject.setChecked(false);
-                } else {
-                    holder.checkSubject.setChecked(true);
-                }
-            }
-        });
-        holder.checkSubject.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    checkedSubjects.add(model.getSubjectName());
-                } else {
-                    checkedSubjects.remove(model.getSubjectName());
-                }
-            }
-        });
     }
 
     public static class WillStudyHolder extends RecyclerView.ViewHolder{

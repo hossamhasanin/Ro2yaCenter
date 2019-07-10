@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
@@ -16,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,9 +45,11 @@ public class ShowSubjects extends AppCompatActivity {
     FloatingActionButton addMoreSubjects;
     TextView emptyMessError;
     RelativeLayout subjectListContainer;
+    Button firstGrade , thirdGrade , secondGrade;
     FirebaseRecyclerOptions<SubjectModel> firebaseRecyclerOptions;
     Query query;
-    Activity context = this;
+    ShowSubjects context = this;
+    String selectedGrade = "1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +87,7 @@ public class ShowSubjects extends AppCompatActivity {
         firebaseRecyclerOptions =
                 new FirebaseRecyclerOptions.Builder<SubjectModel>().setQuery(query , SubjectModel.class).build();
 
-        subjectsRecAdapter = new SubjectsRecAdapter(firebaseRecyclerOptions , this);
+        subjectsRecAdapter = new SubjectsRecAdapter(firebaseRecyclerOptions , this , selectedGrade);
         subjectsList = (RecyclerView) findViewById(R.id.subjects_list);
         subjectsList.setLayoutManager(new LinearLayoutManager(this));
         subjectsList.setAdapter(subjectsRecAdapter);
@@ -106,6 +110,71 @@ public class ShowSubjects extends AppCompatActivity {
                 intent.putExtras(bundle);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        firstGrade = findViewById(R.id.show_first_grade);
+        secondGrade = findViewById(R.id.show_second_grade);
+        thirdGrade = findViewById(R.id.show_third_grade);
+
+        firstGrade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedGrade = "1";
+                subjectsRecAdapter.stopListening();
+                subjectsRecAdapter = null;
+                subjectsRecAdapter = new SubjectsRecAdapter(firebaseRecyclerOptions , context , selectedGrade);
+                subjectsList.setLayoutManager(new LinearLayoutManager(context));
+                subjectsList.setAdapter(subjectsRecAdapter);
+                subjectsRecAdapter.startListening();
+
+                firstGrade.setBackground(ContextCompat.getDrawable(context , R.drawable.button_white_rounded_shabe));
+                firstGrade.setTextColor(Color.BLACK);
+                secondGrade.setBackground(ContextCompat.getDrawable(context , R.drawable.button_shape_blue));
+                secondGrade.setTextColor(Color.WHITE);
+                thirdGrade.setBackground(ContextCompat.getDrawable(context , R.drawable.button_shape_blue));
+                thirdGrade.setTextColor(Color.WHITE);
+            }
+        });
+
+        secondGrade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedGrade = "2";
+                subjectsRecAdapter.stopListening();
+                subjectsRecAdapter = null;
+                subjectsRecAdapter = new SubjectsRecAdapter(firebaseRecyclerOptions , context , selectedGrade);
+                subjectsList.setLayoutManager(new LinearLayoutManager(context));
+                subjectsList.setAdapter(subjectsRecAdapter);
+                subjectsRecAdapter.startListening();
+
+                firstGrade.setBackground(ContextCompat.getDrawable(context , R.drawable.button_shape_blue));
+                firstGrade.setTextColor(Color.WHITE);
+                secondGrade.setBackground(ContextCompat.getDrawable(context , R.drawable.button_white_rounded_shabe));
+                secondGrade.setTextColor(Color.BLACK);
+                thirdGrade.setBackground(ContextCompat.getDrawable(context , R.drawable.button_shape_blue));
+                thirdGrade.setTextColor(Color.WHITE);
+            }
+        });
+
+
+        thirdGrade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedGrade = "3";
+                subjectsRecAdapter.stopListening();
+                subjectsRecAdapter = null;
+                subjectsRecAdapter = new SubjectsRecAdapter(firebaseRecyclerOptions , context , selectedGrade);
+                subjectsList.setLayoutManager(new LinearLayoutManager(context));
+                subjectsList.setAdapter(subjectsRecAdapter);
+                subjectsRecAdapter.startListening();
+
+                firstGrade.setBackground(ContextCompat.getDrawable(context , R.drawable.button_shape_blue));
+                firstGrade.setTextColor(Color.WHITE);
+                secondGrade.setBackground(ContextCompat.getDrawable(context , R.drawable.button_shape_blue));
+                secondGrade.setTextColor(Color.WHITE);
+                thirdGrade.setBackground(ContextCompat.getDrawable(context , R.drawable.button_white_rounded_shabe));
+                thirdGrade.setTextColor(Color.BLACK);
             }
         });
 
@@ -150,7 +219,7 @@ public class ShowSubjects extends AppCompatActivity {
                     Query searchQueary = query.orderByChild("subjectName").startAt(searchText).endAt(searchText + "\uf8ff");
                     firebaseRecyclerOptions =
                             new FirebaseRecyclerOptions.Builder<SubjectModel>().setQuery(searchQueary , SubjectModel.class).build();
-                    subjectsRecAdapter = new SubjectsRecAdapter(firebaseRecyclerOptions , context);
+                    subjectsRecAdapter = new SubjectsRecAdapter(firebaseRecyclerOptions , context , selectedGrade);
                     subjectsList.setLayoutManager(new LinearLayoutManager(context));
                     subjectsList.setAdapter(subjectsRecAdapter);
                     subjectsRecAdapter.startListening();
@@ -166,7 +235,7 @@ public class ShowSubjects extends AppCompatActivity {
                     subjectsRecAdapter = null;
                     firebaseRecyclerOptions =
                             new FirebaseRecyclerOptions.Builder<SubjectModel>().setQuery(query , SubjectModel.class).build();
-                    subjectsRecAdapter = new SubjectsRecAdapter(firebaseRecyclerOptions , context);
+                    subjectsRecAdapter = new SubjectsRecAdapter(firebaseRecyclerOptions , context , selectedGrade);
                     subjectsList.setLayoutManager(new LinearLayoutManager(context));
                     subjectsList.setAdapter(subjectsRecAdapter);
                     subjectsRecAdapter.startListening();

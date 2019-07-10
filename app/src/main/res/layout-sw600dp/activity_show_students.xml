@@ -16,7 +16,7 @@
         android:id="@+id/students_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/include2"
+        android:layout_below="@+id/grades"
         android:background="@drawable/library"
         android:visibility="gone" />
 
@@ -48,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:backgroundTint="@color/red_dark"
+        app:backgroundTint="@color/red_dark"
         android:visibility="gone"
         app:srcCompat="@drawable/ic_delete"
         android:layout_alignParentBottom="true"
@@ -61,12 +61,49 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:backgroundTint="@android:color/darker_gray"
+        app:backgroundTint="@android:color/darker_gray"
         android:src="@drawable/ic_exit_white_2"
         android:visibility="gone"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_margin="15dp"
         />
+
+    <LinearLayout
+        android:id="@+id/grades"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/include2"
+        android:layout_alignParentEnd="true" >
+        <Button
+            android:id="@+id/show_first_grade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="اولى ثانوي"
+            android:layout_weight=".3"
+            android:layout_margin="5dp"
+            android:textSize="26sp"
+            android:background="@drawable/button_white_rounded_shabe"/>
+        <Button
+            android:id="@+id/show_second_grade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="تانية ثانوي"
+            android:layout_weight=".3"
+            android:layout_margin="5dp"
+            android:textColor="#FFF"
+            android:textSize="26sp"
+            android:background="@drawable/button_shape_blue"/>
+        <Button
+            android:id="@+id/show_third_grade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="تالتة ثانوي"
+            android:textColor="#FFF"
+            android:background="@drawable/button_shape_blue"
+            android:layout_weight=".3"
+            android:textSize="26sp"
+            android:layout_margin="5dp"/>
+    </LinearLayout>
 
 </RelativeLayout>
