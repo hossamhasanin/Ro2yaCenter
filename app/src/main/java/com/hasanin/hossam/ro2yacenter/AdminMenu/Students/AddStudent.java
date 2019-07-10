@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -126,22 +127,30 @@ public class AddStudent extends AppCompatActivity {
         studentSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkedSubjects.get(0).equals("empty")){
-                    checkedSubjects.remove("empty");
-                }
-                if (fildesCheck(context , studentName.getText().toString() , checkedSubjects)) {
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("members");
-                    StudentModel studentModel = new StudentModel(false, checkedSubjects, studentName.getText().toString(), 0 , generatedCode);
-                    databaseReference.child(generatedCode).setValue(studentModel).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            studentName.setText("");
-                            checkedSubjects.clear();
+                if (checkedSubjects != null && !checkedSubjects.isEmpty()) {
+                    if (checkedSubjects.get(0).equals("empty")) {
+                        checkedSubjects.remove("empty");
+                    }
+                    if (fildesCheck(context, studentName.getText().toString(), checkedSubjects)) {
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("members");
+                        StudentModel studentModel = new StudentModel(false, checkedSubjects, studentName.getText().toString(), 0, generatedCode);
+                        databaseReference.child(generatedCode).setValue(studentModel).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()){
+                                    studentName.setText("");
+                                    checkedSubjects.clear();
 
-                            Intent in = new Intent(context , ShowStudents.class);
-                            startActivity(in);
-                        }
-                    });
+                                    Intent intent = new Intent(AddStudent.this , ShowStudents.class);
+                                    startActivity(intent);
+                                } else {
+                                    Toast.makeText(context , " Error => " + task.getException().getMessage() , Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    Snackbar.make(findViewById(android.R.id.content) , "لا تترك المواد التي سيدرسها فارغة !"  , Snackbar.LENGTH_LONG).show();
                 }
             }
         });
@@ -150,10 +159,12 @@ public class AddStudent extends AppCompatActivity {
 
     public boolean fildesCheck(Context context , String s_name , ArrayList<String> checkedSubjects){
         if (s_name.isEmpty()){
-            Toast.makeText(context , "لا تترك اسم الطالب فارغا" , Toast.LENGTH_LONG).show();
+            //Toast.makeText(context , "لا تترك اسم الطالب فارغا" , Toast.LENGTH_LONG).show();
+            Snackbar.make(findViewById(android.R.id.content) , "لا تترك اسم الطالب فارغا !"  , Snackbar.LENGTH_LONG).show();
             return false;
-        } else if(checkedSubjects.size() == 0){
-            Toast.makeText(context , "لا تترك المواد التي سيدرسها فارغة" , Toast.LENGTH_LONG).show();
+        } else if(checkedSubjects.isEmpty()){
+            //Toast.makeText(context , "لا تترك المواد التي سيدرسها فارغة" , Toast.LENGTH_LONG).show();
+            Snackbar.make(findViewById(android.R.id.content) , "لا تترك المواد التي سيدرسها فارغة !"  , Snackbar.LENGTH_LONG).show();
             return false;
         } else {
             return true;

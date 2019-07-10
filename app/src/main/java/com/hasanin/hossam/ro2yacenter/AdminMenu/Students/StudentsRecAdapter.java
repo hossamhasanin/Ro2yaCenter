@@ -6,8 +6,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -38,11 +40,24 @@ public class StudentsRecAdapter extends FirebaseRecyclerAdapter<StudentModel , S
      *
      * @param options
      */
-    public Activity context;
+    public ShowStudents context;
     public String searchQuery = "";
-    public StudentsRecAdapter(@NonNull FirebaseRecyclerOptions<StudentModel> options , Activity context) {
+    DatabaseReference databaseReference;
+    DatabaseReference reference;
+    DatabaseReference attendance;
+    DatabaseReference monthly;
+    ArrayList<StudentModel> checked;
+
+
+
+    public StudentsRecAdapter(@NonNull FirebaseRecyclerOptions<StudentModel> options , ShowStudents context) {
         super(options);
         this.context = context;
+        this.databaseReference = FirebaseDatabase.getInstance().getReference();
+        this.reference = databaseReference.child("members");
+        this.attendance = databaseReference.child("attendance");
+        this.monthly = databaseReference.child("monthly");
+        this.checked = new ArrayList<StudentModel>();
     }
 
     public void setSearchQuery(String searchQuery){
@@ -58,10 +73,8 @@ public class StudentsRecAdapter extends FirebaseRecyclerAdapter<StudentModel , S
         return studentHolder;
     }
 
-    DatabaseReference databaseReference;
     @Override
-    protected void onBindViewHolder(@NonNull StudentHolder holder, int position, @NonNull final StudentModel model) {
-        databaseReference = FirebaseDatabase.getInstance().getReference();
+    protected void onBindViewHolder(@NonNull final StudentHolder holder, final int position, @NonNull final StudentModel model) {
         if (model.getSubjects() == null){
             ArrayList<String> s = new ArrayList<String>();
             s.add("empty");
@@ -72,94 +85,127 @@ public class StudentsRecAdapter extends FirebaseRecyclerAdapter<StudentModel , S
             holder.studentName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    android.support.v7.app.AlertDialog.Builder popupmess = new android.support.v7.app.AlertDialog.Builder(context);
-                    View poplayout = LayoutInflater.from(context).inflate(R.layout.student_info, null);
-                    popupmess.setView(poplayout);
-                    final android.support.v7.app.AlertDialog ad = popupmess.show();
-                    TextView studentName = (TextView) poplayout.findViewById(R.id.show_studentname);
-                    TextView studentCode = (TextView) poplayout.findViewById(R.id.show_code);
-                    final TextView studentSubjects = (TextView) poplayout.findViewById(R.id.show_subjects);
-                    Button editStudent = (Button) poplayout.findViewById(R.id.edit_student);
-                    Button deleteStudent = (Button) poplayout.findViewById(R.id.delete_student);
+                    if (checked.isEmpty()) {
+                        AlertDialog.Builder popupmess = new AlertDialog.Builder(context);
+                        View poplayout = LayoutInflater.from(context).inflate(R.layout.student_info, null);
+                        popupmess.setView(poplayout);
+                        final AlertDialog popupmessAd = popupmess.create();
+                        popupmess.show();
+                        TextView studentName = (TextView) poplayout.findViewById(R.id.show_studentname);
+                        TextView studentCode = (TextView) poplayout.findViewById(R.id.show_code);
+                        final TextView studentSubjects = (TextView) poplayout.findViewById(R.id.show_subjects);
+                        Button editStudent = (Button) poplayout.findViewById(R.id.edit_student);
+                        Button deleteStudent = (Button) poplayout.findViewById(R.id.delete_student);
 
-                    studentName.setText(model.getName());
-                    studentCode.setText(model.getCode());
-                    if(!model.getSubjects().get(0).equals("empty")) {
-                        studentSubjects.setText(TextUtils.join(" , ", model.getSubjects()));
+                        studentName.setText(model.getName());
+                        studentCode.setText(model.getCode());
+                        if (!model.getSubjects().get(0).equals("empty")) {
+                            studentSubjects.setText(TextUtils.join(" , ", model.getSubjects()));
+                        } else {
+                            studentSubjects.setText("لا يوجد له مواد بعد !");
+                        }
+                        editStudent.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                popupmessAd.dismiss();
+                                Intent intent = new Intent(context, AddStudent.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putBoolean("editMode", true);
+                                bundle.putString("studentName", model.getName());
+                                bundle.putString("code", model.getCode());
+                                bundle.putStringArrayList("checkedSubjects", model.getSubjects());
+                                intent.putExtras(bundle);
+                                context.startActivity(intent);
+                            }
+                        });
+                        deleteStudent.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                popupmessAd.dismiss();
+                                final AlertDialog.Builder al = AlertMessage(context, "هل انت متأكد تريد حذف ذلك الطالب ؟", "حذف الطالب ؟", R.drawable.ic_delete);
+                                final AlertDialog checkDialog = al.create();
+                                al.setPositiveButton("نعم", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        checkDialog.dismiss();
+                                        final ProgressDialog progressDialog = new ProgressDialog(context);
+                                        progressDialog.setMessage("يتم المسح انتظر ...");
+                                        progressDialog.show();
+                                        reference.child(model.getCode()).removeValue();
+                                        attendance.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                                    for (DataSnapshot s : snapshot.getChildren()) {
+                                                        attendance.child(snapshot.getKey()).child(s.getKey()).child("attendantStudents").child(model.getCode()).removeValue();
+                                                    }
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+
+                                        monthly.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                                    for (DataSnapshot s : snapshot.getChildren()) {
+                                                        monthly.child(snapshot.getKey()).child(s.getKey()).child("usersCode").child(model.getCode()).removeValue();
+                                                    }
+                                                }
+                                                progressDialog.dismiss();
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            }
+                                        });
+                                    }
+                                });
+                                al.setNegativeButton("لا", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                });
+                                al.show();
+                            }
+                        });
                     } else {
-                        studentSubjects.setText("لا يوجد له مواد بعد !");
+                        if (!checked.contains(model)){
+                            checked.add(model);
+                            holder.studentName.setBackgroundColor(ContextCompat.getColor(context , R.color.colorPrimaryDark));
+                            holder.studentName.setTextColor(Color.WHITE);
+                        } else {
+                            checked.remove(model);
+                            holder.studentName.setBackground(ContextCompat.getDrawable(context , R.drawable.editext_radious_shabe));
+                            holder.studentName.setTextColor(Color.BLACK);
+                            if (checked.isEmpty()){
+                                context.deleteAll.setVisibility(View.GONE);
+                                context.close.setVisibility(View.GONE);
+                                context.addMoreStudents.setVisibility(View.VISIBLE);
+                            }
+                        }
                     }
-                    editStudent.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            ad.dismiss();
-                            Intent intent = new Intent(context, AddStudent.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putBoolean("editMode", true);
-                            bundle.putString("studentName", model.getName());
-                            bundle.putString("code", model.getCode());
-                            bundle.putStringArrayList("checkedSubjects", model.getSubjects());
-                            intent.putExtras(bundle);
-                            context.startActivity(intent);
-                        }
-                    });
-                    deleteStudent.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            ad.dismiss();
-                            AlertDialog.Builder al = AlertMessage(context, "هل انت متأكد تريد حذف ذلك الطالب ؟", "حذف الطالب ؟", R.drawable.ic_delete);
-                            al.setPositiveButton("نعم", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    final ProgressDialog progressDialog = new ProgressDialog(context);
-                                    progressDialog.setMessage("يتم المسح انتظر ...");
-                                    progressDialog.show();
-                                    DatabaseReference reference = databaseReference.child("members");
-                                    reference.child(model.getCode()).removeValue();
-                                    final DatabaseReference attendance = databaseReference.child("attendance");
-                                    attendance.addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                                                for (DataSnapshot s : snapshot.getChildren()){
-                                                    attendance.child(snapshot.getKey()).child(s.getKey()).child("attendantStudents").child(model.getCode()).removeValue();
-                                                }
-                                            }
-                                        }
+                }
+            });
+            holder.studentName.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (!checked.contains(model)){
+                       checked.add(model);
+                        holder.studentName.setBackgroundColor(ContextCompat.getColor(context , R.color.colorPrimaryDark));
+                        holder.studentName.setTextColor(Color.WHITE);
 
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                        }
-                                    });
-                                    final DatabaseReference monthly = databaseReference.child("monthly");
-                                    monthly.addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                                                for (DataSnapshot s : snapshot.getChildren()){
-                                                    attendance.child(snapshot.getKey()).child(s.getKey()).child("usersCode").child(model.getCode()).removeValue();
-                                                }
-                                            }
-                                            progressDialog.dismiss();
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                        }
-                                    });
-                                }
-                            });
-                            al.setNegativeButton("لا", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            });
-                            al.show();
-                        }
-                    });
+                        context.deleteAll.setVisibility(View.VISIBLE);
+                        context.close.setVisibility(View.VISIBLE);
+                        context.addMoreStudents.setVisibility(View.GONE);
+                        return true;
+                    }
+                    return false;
                 }
             });
         } else {
@@ -167,6 +213,7 @@ public class StudentsRecAdapter extends FirebaseRecyclerAdapter<StudentModel , S
             holder.studentName.setVisibility(View.GONE);
         }
     }
+
 
     public AlertDialog.Builder AlertMessage(Activity context , String message , String title , int icon){
         AlertDialog.Builder al = new AlertDialog.Builder(context);

@@ -78,9 +78,14 @@ public class PaidUsersAdapter extends FirebaseRecyclerAdapter<StudentModel , Pai
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             MonthlyModel monthlyModel = dataSnapshot.getValue(MonthlyModel.class);
-                            if (monthlyModel.getUsersCode().contains(model.getCode())) {
-                                is_paid.setText("تم الدفع");
-                                is_paidStatus = true;
+                            if (monthlyModel.getUsersCode() != null) {
+                                if (monthlyModel.getUsersCode().contains(model.getCode())) {
+                                    is_paid.setText("تم الدفع");
+                                    is_paidStatus = true;
+                                } else {
+                                    is_paid.setText("لم يتم الدفع");
+                                    is_paidStatus = false;
+                                }
                             } else {
                                 is_paid.setText("لم يتم الدفع");
                                 is_paidStatus = false;
@@ -109,6 +114,9 @@ public class PaidUsersAdapter extends FirebaseRecyclerAdapter<StudentModel , Pai
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     MonthlyModel monthlyModel = dataSnapshot.getValue(MonthlyModel.class);
                                     paidUsers = monthlyModel.getUsersCode();
+                                    if (paidUsers == null){
+                                        paidUsers = new ArrayList<>();
+                                    }
                                     if (is_paidStatus){
                                         is_paidStatus = false;
                                         paidUsers.remove(model.getCode());

@@ -59,7 +59,7 @@
         <activity android:name=".AdminMenu.Monthly.Show.ShowMonths" />
         <activity android:name=".AdminMenu.Monthly.Store.StoreUsersMonthly" />
         <activity android:name=".AdminMenu.Monthly.Show.ShowMonthlySubjects" />
-        <activity android:name=".AdminMenu.Monthly.Show.PaidUsers"></activity>
+        <activity android:name=".AdminMenu.Monthly.Show.PaidUsers" android:parentActivityName=".AdminMenu.Monthly.Show.ShowMonthlySubjects"></activity>
     </application>
 
 </manifest>

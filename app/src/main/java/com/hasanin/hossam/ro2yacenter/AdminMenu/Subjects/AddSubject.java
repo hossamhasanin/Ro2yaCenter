@@ -3,6 +3,7 @@ package com.hasanin.hossam.ro2yacenter.AdminMenu.Subjects;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +20,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -151,16 +154,25 @@ public class AddSubject extends AppCompatActivity {
                         subjectId = databaseReference.push().getKey();
                     }
                     SubjectModel subject = new SubjectModel(subjectId , s_name , t_name , checkedDays ,m , t);
-                    databaseReference.child(subjectId).setValue(subject);
+                    databaseReference.child(subjectId).setValue(subject).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()){
 
-                    subjectName.setText("");
-                    teacherName.setText("");
-                    money.setText("");
-                    time.setText("");
-                    checkedDays.clear();
+                                subjectName.setText("");
+                                teacherName.setText("");
+                                money.setText("");
+                                time.setText("");
+                                checkedDays.clear();
 
-                    Intent intent = new Intent(getApplicationContext() , ShowSubjects.class);
-                    startActivity(intent);
+                                Intent intent = new Intent(getApplicationContext() , ShowSubjects.class);
+                                startActivity(intent);
+
+                            } else {
+                                Toast.makeText(context , " Error => " + task.getException().getMessage() , Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
 
                 }
 

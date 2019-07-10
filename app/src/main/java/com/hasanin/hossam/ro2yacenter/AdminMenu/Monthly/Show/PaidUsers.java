@@ -1,6 +1,7 @@
 package com.hasanin.hossam.ro2yacenter.AdminMenu.Monthly.Show;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import android.view.View;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.hasanin.hossam.ro2yacenter.AdminMenu.AdminMenuActivity;
 import com.hasanin.hossam.ro2yacenter.AdminMenu.Students.StudentModel;
 import com.hasanin.hossam.ro2yacenter.Helper;
 import com.hasanin.hossam.ro2yacenter.R;
@@ -37,13 +39,8 @@ public class PaidUsers extends AppCompatActivity {
         setContentView(R.layout.activity_paid_users);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_backword_white);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         bundle = getIntent().getExtras();
 
         int currentMonth = new DateTime(new Date().getTime()).getMonthOfYear();
@@ -97,4 +94,10 @@ public class PaidUsers extends AppCompatActivity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        Intent intent = new Intent(this , .class);
+//
+//    }
 }

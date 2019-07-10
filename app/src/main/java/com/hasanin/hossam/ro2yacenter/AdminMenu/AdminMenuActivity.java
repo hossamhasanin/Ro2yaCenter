@@ -109,7 +109,6 @@ public class AdminMenuActivity extends AppCompatActivity {
                 bundle.putStringArrayList("checkedSubjects" , new ArrayList<String>());
                 intent.putExtras(bundle);
                 startActivity(intent);
-                finish();
             }
         });
         studentsRecord.setOnClickListener(new View.OnClickListener() {

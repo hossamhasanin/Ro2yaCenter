@@ -105,6 +105,7 @@ public class ShowSubjects extends AppCompatActivity {
                 bundle.putStringArrayList("checkedDays" , cd);
                 intent.putExtras(bundle);
                 startActivity(intent);
+                finish();
             }
         });
 

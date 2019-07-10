@@ -1,6 +1,7 @@
 package com.hasanin.hossam.ro2yacenter.AdminMenu.Students;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,11 +46,26 @@ public class ShowStudents extends AppCompatActivity {
     RecyclerView studentsList;
     StudentsRecAdapter studentsRecAdapter;
     FloatingActionButton addMoreStudents;
+    FloatingActionButton deleteAll;
+    FloatingActionButton close;
     TextView emptyMessError;
     RelativeLayout studentListContainer;
     FirebaseRecyclerOptions<StudentModel> firebaseRecyclerOptions;
-    Activity activity = this;
+    ShowStudents activity = this;
     Query query;
+    private DatabaseReference.CompletionListener mRemoveListener =
+            new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError error, DatabaseReference ref) {
+                    if (error == null) {
+                        Log.d("Show", "Removed: " + ref);
+                        // or you can use:
+                        //System.out.println("Removed: " + ref);
+                    } else {
+                        Log.e("Show", "Remove of " + ref + " failed: " + error.getMessage());
+                    }
+                }
+            };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +98,8 @@ public class ShowStudents extends AppCompatActivity {
 //            }
 //        });
 
-        query = FirebaseDatabase.getInstance().getReference().child("members");
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        query = databaseReference.child("members");
         query.keepSynced(true);
         firebaseRecyclerOptions =
                 new FirebaseRecyclerOptions.Builder<StudentModel>().setQuery(query , StudentModel.class).build();
@@ -104,6 +122,72 @@ public class ShowStudents extends AppCompatActivity {
                 bundle.putStringArrayList("checkedSubjects" , new ArrayList<String>());
                 intent.putExtras(bundle);
                 startActivity(intent);
+                finish();
+            }
+        });
+
+        deleteAll = (FloatingActionButton) findViewById(R.id.delete_all_students);
+        close = (FloatingActionButton) findViewById(R.id.close);
+
+        deleteAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final ProgressDialog progressDialog = new ProgressDialog(activity);
+                progressDialog.setMessage("يتم المسح انتظر ...");
+                progressDialog.show();
+                for (final StudentModel student : studentsRecAdapter.checked){
+                    databaseReference.child("members").child(student.getCode()).removeValue(mRemoveListener);
+                    databaseReference.child("attendance").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                for (DataSnapshot s : snapshot.getChildren()) {
+                                    databaseReference.child("attendance").child(snapshot.getKey()).child(s.getKey()).child("attendantStudents").child(student.getCode()).removeValue(mRemoveListener);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                    databaseReference.child("monthly").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                for (DataSnapshot s : snapshot.getChildren()) {
+                                    databaseReference.child("monthly").child(snapshot.getKey()).child(s.getKey()).child("usersCode").child(student.getCode()).removeValue(mRemoveListener);
+                                }
+                            }
+
+                            progressDialog.dismiss();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                        }
+                    });
+
+                }
+            }
+        });
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                studentsRecAdapter.checked.clear();
+                studentsRecAdapter.stopListening();
+                studentsRecAdapter = null;
+                studentsRecAdapter = new StudentsRecAdapter(firebaseRecyclerOptions , activity);
+                studentsList.setLayoutManager(new LinearLayoutManager(activity));
+                studentsList.setAdapter(studentsRecAdapter);
+                studentsRecAdapter.startListening();
+
+                close.setVisibility(View.GONE);
+                deleteAll.setVisibility(View.GONE);
+                addMoreStudents.setVisibility(View.VISIBLE);
+
             }
         });
 
@@ -160,7 +244,7 @@ public class ShowStudents extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (newText.isEmpty()){
-                    Toast.makeText(getApplicationContext() , "koko" , Toast.LENGTH_LONG).show();
+                   // Toast.makeText(getApplicationContext() , "koko" , Toast.LENGTH_LONG).show();
                     studentsRecAdapter.stopListening();
                     studentsRecAdapter = null;
                     firebaseRecyclerOptions =
