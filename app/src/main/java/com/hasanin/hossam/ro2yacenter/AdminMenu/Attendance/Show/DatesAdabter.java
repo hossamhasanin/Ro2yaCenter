@@ -26,9 +26,11 @@ public class DatesAdabter extends FirebaseRecyclerAdapter<AttendanceModel , Date
      * @param options
      */
     Activity context;
-    public DatesAdabter(@NonNull FirebaseRecyclerOptions<AttendanceModel> options , Activity context) {
+    String selectedGrade;
+    public DatesAdabter(@NonNull FirebaseRecyclerOptions<AttendanceModel> options , Activity context , String selectedGrade) {
         super(options);
         this.context = context;
+        this.selectedGrade = selectedGrade;
     }
 
     @NonNull
@@ -52,6 +54,7 @@ public class DatesAdabter extends FirebaseRecyclerAdapter<AttendanceModel , Date
                     Bundle bundle = new Bundle();
                     bundle.putStringArrayList("usersCode", model.getAttendantStudents());
                     bundle.putString("record", fullDate);
+                    bundle.putString("selectedGrade", selectedGrade);
                     intent.putExtras(bundle);
                     context.startActivity(intent);
                 }

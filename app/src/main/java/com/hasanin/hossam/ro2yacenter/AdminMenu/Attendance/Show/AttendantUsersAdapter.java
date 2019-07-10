@@ -26,10 +26,12 @@ public class AttendantUsersAdapter extends FirebaseRecyclerAdapter<StudentModel 
      */
     Activity context;
     ArrayList<String> usersCode;
-    public AttendantUsersAdapter(@NonNull FirebaseRecyclerOptions<StudentModel> options , Activity context , ArrayList<String> usersCode) {
+    String selectedGrade;
+    public AttendantUsersAdapter(@NonNull FirebaseRecyclerOptions<StudentModel> options , Activity context , ArrayList<String> usersCode , String selectedGrade) {
         super(options);
         this.context = context;
         this.usersCode = usersCode;
+        this.selectedGrade = selectedGrade;
     }
 
     @NonNull
@@ -42,7 +44,7 @@ public class AttendantUsersAdapter extends FirebaseRecyclerAdapter<StudentModel 
 
     @Override
     protected void onBindViewHolder(@NonNull StudentHolder holder, int position, @NonNull StudentModel model) {
-        if (usersCode.contains(model.getCode())){
+        if (usersCode.contains(model.getCode()) && model.getStudyGrade().equals(selectedGrade)){
             holder.studentName.setText(model.getName());
         } else {
             holder.studentContainer.setVisibility(View.GONE);

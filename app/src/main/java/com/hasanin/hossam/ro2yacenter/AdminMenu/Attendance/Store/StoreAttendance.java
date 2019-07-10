@@ -1,7 +1,9 @@
 package com.hasanin.hossam.ro2yacenter.AdminMenu.Attendance.Store;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -19,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.hasanin.hossam.ro2yacenter.AdminMenu.Subjects.SubjectModel;
+import com.hasanin.hossam.ro2yacenter.AdminMenu.Subjects.SubjectsRecAdapter;
 import com.hasanin.hossam.ro2yacenter.Helper;
 import com.hasanin.hossam.ro2yacenter.R;
 
@@ -32,6 +36,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class StoreAttendance extends AppCompatActivity {
 
     RecyclerView availableSubjectsList;
+    Button firstGrade , thirdGrade , secondGrade;
+    String selectedGrade = "1";
     FirebaseRecyclerOptions<SubjectModel> firebaseRecyclerOptions;
     Query query;
     AvailableSubjectsAdapter availableSubjectsAdapter;
@@ -61,9 +67,74 @@ public class StoreAttendance extends AppCompatActivity {
         firebaseRecyclerOptions =
                 new FirebaseRecyclerOptions.Builder<SubjectModel>().setQuery(query , SubjectModel.class).build();
 
-        availableSubjectsAdapter = new AvailableSubjectsAdapter(firebaseRecyclerOptions , this);
+        availableSubjectsAdapter = new AvailableSubjectsAdapter(firebaseRecyclerOptions , this , selectedGrade);
         availableSubjectsList.setLayoutManager(new LinearLayoutManager(this));
         availableSubjectsList.setAdapter(availableSubjectsAdapter);
+
+        firstGrade = findViewById(R.id.show_first_grade);
+        secondGrade = findViewById(R.id.show_second_grade);
+        thirdGrade = findViewById(R.id.show_third_grade);
+
+        firstGrade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedGrade = "1";
+                availableSubjectsAdapter.stopListening();
+                availableSubjectsAdapter = null;
+                availableSubjectsAdapter = new AvailableSubjectsAdapter(firebaseRecyclerOptions , StoreAttendance.this , selectedGrade);
+                availableSubjectsList.setLayoutManager(new LinearLayoutManager(StoreAttendance.this));
+                availableSubjectsList.setAdapter(availableSubjectsAdapter);
+                availableSubjectsAdapter.startListening();
+
+                firstGrade.setBackground(ContextCompat.getDrawable(StoreAttendance.this , R.drawable.button_white_rounded_shabe));
+                firstGrade.setTextColor(Color.BLACK);
+                secondGrade.setBackground(ContextCompat.getDrawable(StoreAttendance.this , R.drawable.button_shape_blue));
+                secondGrade.setTextColor(Color.WHITE);
+                thirdGrade.setBackground(ContextCompat.getDrawable(StoreAttendance.this , R.drawable.button_shape_blue));
+                thirdGrade.setTextColor(Color.WHITE);
+            }
+        });
+
+        secondGrade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedGrade = "2";
+                availableSubjectsAdapter.stopListening();
+                availableSubjectsAdapter = null;
+                availableSubjectsAdapter = new AvailableSubjectsAdapter(firebaseRecyclerOptions , StoreAttendance.this , selectedGrade);
+                availableSubjectsList.setLayoutManager(new LinearLayoutManager(StoreAttendance.this));
+                availableSubjectsList.setAdapter(availableSubjectsAdapter);
+                availableSubjectsAdapter.startListening();
+
+                firstGrade.setBackground(ContextCompat.getDrawable(StoreAttendance.this , R.drawable.button_shape_blue));
+                firstGrade.setTextColor(Color.WHITE);
+                secondGrade.setBackground(ContextCompat.getDrawable(StoreAttendance.this , R.drawable.button_white_rounded_shabe));
+                secondGrade.setTextColor(Color.BLACK);
+                thirdGrade.setBackground(ContextCompat.getDrawable(StoreAttendance.this , R.drawable.button_shape_blue));
+                thirdGrade.setTextColor(Color.WHITE);
+            }
+        });
+
+
+        thirdGrade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedGrade = "3";
+                availableSubjectsAdapter.stopListening();
+                availableSubjectsAdapter = null;
+                availableSubjectsAdapter = new AvailableSubjectsAdapter(firebaseRecyclerOptions , StoreAttendance.this , selectedGrade);
+                availableSubjectsList.setLayoutManager(new LinearLayoutManager(StoreAttendance.this));
+                availableSubjectsList.setAdapter(availableSubjectsAdapter);
+                availableSubjectsAdapter.startListening();
+
+                firstGrade.setBackground(ContextCompat.getDrawable(StoreAttendance.this , R.drawable.button_shape_blue));
+                firstGrade.setTextColor(Color.WHITE);
+                secondGrade.setBackground(ContextCompat.getDrawable(StoreAttendance.this , R.drawable.button_shape_blue));
+                secondGrade.setTextColor(Color.WHITE);
+                thirdGrade.setBackground(ContextCompat.getDrawable(StoreAttendance.this , R.drawable.button_white_rounded_shabe));
+                thirdGrade.setTextColor(Color.BLACK);
+            }
+        });
 
 
     }

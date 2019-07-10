@@ -10,23 +10,49 @@
         layout="@layout/tool_bar"
         android:id="@+id/include2" />
 
-    <TextView
-        android:id="@+id/header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="المواد المتاحة :"
-        android:textSize="28sp"
-        android:layout_below="@+id/include2"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"/>
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/show_available_subjects"
-        android:layout_below="@+id/header"
+        android:layout_below="@+id/grades"
         android:background="@drawable/library" />
+
+    <LinearLayout
+        android:id="@+id/grades"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/include2"
+        android:layout_alignParentEnd="true" >
+        <Button
+            android:id="@+id/show_first_grade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="اولى ثانوي"
+            android:layout_weight=".3"
+            android:layout_margin="5dp"
+            android:textSize="26sp"
+            android:background="@drawable/button_white_rounded_shabe"/>
+        <Button
+            android:id="@+id/show_second_grade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="تانية ثانوي"
+            android:layout_weight=".3"
+            android:layout_margin="5dp"
+            android:textSize="26sp"
+            android:textColor="#FFF"
+            android:background="@drawable/button_shape_blue"/>
+        <Button
+            android:id="@+id/show_third_grade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="تالتة ثانوي"
+            android:textColor="#FFF"
+            android:textSize="26sp"
+            android:background="@drawable/button_shape_blue"
+            android:layout_weight=".3"
+            android:layout_margin="5dp"/>
+    </LinearLayout>
 
 </RelativeLayout>

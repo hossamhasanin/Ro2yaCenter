@@ -28,6 +28,7 @@ public class ShowAttendanceDates extends AppCompatActivity {
     FirebaseRecyclerOptions<AttendanceModel> firebaseRecyclerOptions;
     DatesAdabter datesAdabter;
     Bundle bundle;
+    String selectedGrade;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +45,12 @@ public class ShowAttendanceDates extends AppCompatActivity {
         });
         bundle = getIntent().getExtras();
 
+        selectedGrade = bundle.getString("selectedGrade");
+
         datesList = (RecyclerView) findViewById(R.id.dates_list);
-        Query query = FirebaseDatabase.getInstance().getReference().child("attendance").child(bundle.getString("subjectName"));
+        Query query = FirebaseDatabase.getInstance().getReference().child("attendance").child(bundle.getString("subjectId"));
         firebaseRecyclerOptions = new FirebaseRecyclerOptions.Builder<AttendanceModel>().setQuery(query , AttendanceModel.class).build();
-        datesAdabter = new DatesAdabter(firebaseRecyclerOptions , this);
+        datesAdabter = new DatesAdabter(firebaseRecyclerOptions , this , selectedGrade);
         datesList.setAdapter(datesAdabter);
         datesList.setLayoutManager(new LinearLayoutManager(this));
 

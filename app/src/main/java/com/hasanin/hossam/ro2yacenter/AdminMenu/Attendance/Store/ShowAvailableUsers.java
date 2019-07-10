@@ -37,6 +37,7 @@ public class ShowAvailableUsers extends AppCompatActivity {
     RecyclerView availableUsersList;
     AvailableUsersAdapter availableUsersAdapter;
     String subjectName;
+    String subjectId;
     DatabaseReference reference;
     ArrayList<String> usersCode;
     Date date;
@@ -62,6 +63,7 @@ public class ShowAvailableUsers extends AppCompatActivity {
         });
         bundle = getIntent().getExtras();
         subjectName = bundle.getString("subjectsName");
+        subjectId = bundle.getString("subjectId");
         usersCode = bundle.getStringArrayList("usersCode");
 
         date = new Date();
@@ -95,7 +97,7 @@ public class ShowAvailableUsers extends AppCompatActivity {
             reference = FirebaseDatabase.getInstance().getReference().child("attendance");
             //recordedId = reference.child(subjectName).push().getKey();
             AttendanceModel attendanceModel = new AttendanceModel(subjectName , currentMonth , currentYear , date.getTime() , currentDay , availableUsersAdapter.getUsersCode());
-            reference.child(subjectName).child(fullDate).setValue(attendanceModel);
+            reference.child(subjectId).child(fullDate).setValue(attendanceModel);
             Toast.makeText(getApplicationContext() , "تم تسجيل الحاضريين" , Toast.LENGTH_LONG).show();
         }
         return super.onOptionsItemSelected(item);

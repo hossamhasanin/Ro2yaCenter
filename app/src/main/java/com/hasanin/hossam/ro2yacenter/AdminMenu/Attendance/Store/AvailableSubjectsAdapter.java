@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,9 +40,11 @@ public class AvailableSubjectsAdapter extends FirebaseRecyclerAdapter<SubjectMod
      * @param options
      */
     public Activity context;
-    public AvailableSubjectsAdapter(@NonNull FirebaseRecyclerOptions<SubjectModel> options , Activity context) {
+    String selectedGrade;
+    public AvailableSubjectsAdapter(@NonNull FirebaseRecyclerOptions<SubjectModel> options , Activity context , String selectedGrade) {
         super(options);
         this.context = context;
+        this.selectedGrade = selectedGrade;
     }
 
     @NonNull
@@ -63,42 +66,78 @@ public class AvailableSubjectsAdapter extends FirebaseRecyclerAdapter<SubjectMod
     @Override
     protected void onBindViewHolder(@NonNull final SubjectHolder holder, int position, @NonNull final SubjectModel model) {
         reference = FirebaseDatabase.getInstance().getReference();
-        holder.subjectName.setText(model.getSubjectName());
-        holder.subjectName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                date = new Date();
-                currenttime = date.getTime();
-                currentMonth = new DateTime(currenttime).getMonthOfYear();
-                currentDay = new DateTime(currenttime).getDayOfWeek();
-                currentYear = new DateTime(currenttime).getYear();
-                currentDayOfMonth = new DateTime(currenttime).getDayOfMonth();
-                fullDate = String.valueOf(currentDayOfMonth) + "-" + String.valueOf(currentMonth)+"-"+String.valueOf(currentYear);
-                DatabaseReference attendantUsers = reference.child("attendance").child(model.getSubjectName());
-                attendantUsers.child(fullDate).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            usersCode = dataSnapshot.getValue(AttendanceModel.class).getAttendantStudents();
-                            if (usersCode == null) {
-                                usersCode = new ArrayList<String>();
+        if (model.getStudyGrade().contains(selectedGrade)) {
+            holder.subjectName.setText(model.getSubjectName());
+            holder.subjectName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final ProgressDialog progressDialog = new ProgressDialog(context);
+                    progressDialog.setMessage("انتظر قليلا ...");
+                    progressDialog.show();
+                    date = new Date();
+                    currenttime = date.getTime();
+                    currentMonth = new DateTime(currenttime).getMonthOfYear();
+                    currentDay = new DateTime(currenttime).getDayOfWeek();
+                    currentYear = new DateTime(currenttime).getYear();
+                    currentDayOfMonth = new DateTime(currenttime).getDayOfMonth();
+                    fullDate = String.valueOf(currentDayOfMonth) + "-" + String.valueOf(currentMonth) + "-" + String.valueOf(currentYear);
+                    DatabaseReference attendantUsers = reference.child("attendance").child(model.getSubjectId());
+                    attendantUsers.child(fullDate).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                usersCode = dataSnapshot.getValue(AttendanceModel.class).getAttendantStudents();
+                                if (usersCode == null) {
+                                    usersCode = new ArrayList<String>();
+                                } else {
+                                    reference.child("members").addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                                StudentModel student = snapshot.getValue(StudentModel.class);
+                                                ArrayList<String> subjects = student.getSubjects();
+                                                if (subjects == null) {
+                                                    subjects = new ArrayList<String>();
+                                                }
+                                                if (subjects.contains(model.getSubjectName())) {
+                                                    progressDialog.dismiss();
+                                                    Intent intent = new Intent(context, ShowAvailableUsers.class);
+                                                    Bundle bundle = new Bundle();
+                                                    bundle.putString("subjectsName", model.getSubjectName());
+                                                    bundle.putString("subjectId", model.getSubjectId());
+                                                    bundle.putStringArrayList("usersCode", usersCode);
+                                                    intent.putExtras(bundle);
+                                                    context.startActivity(intent);
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+                                }
                             } else {
+                                //Toast.makeText(context , "go" , Toast.LENGTH_LONG).show();
                                 reference.child("members").addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                             ArrayList<String> subjects = snapshot.getValue(StudentModel.class).getSubjects();
-                                        if (subjects == null){
-                                            subjects = new ArrayList<String>();
-                                        }
-                                            if (subjects.contains(model.getSubjectName())){
+                                            if (subjects == null) {
+                                                subjects = new ArrayList<String>();
+                                            }
+                                            if (subjects.contains(model.getSubjectName())) {
+                                                progressDialog.dismiss();
                                                 Intent intent = new Intent(context, ShowAvailableUsers.class);
                                                 Bundle bundle = new Bundle();
                                                 bundle.putString("subjectsName", model.getSubjectName());
-                                                bundle.putStringArrayList("usersCode", usersCode);
+                                                bundle.putString("subjectId", model.getSubjectId());
+                                                bundle.putStringArrayList("usersCode", new ArrayList<String>());
                                                 intent.putExtras(bundle);
                                                 context.startActivity(intent);
-                                                break;
                                             }
                                         }
                                     }
@@ -109,43 +148,20 @@ public class AvailableSubjectsAdapter extends FirebaseRecyclerAdapter<SubjectMod
                                     }
                                 });
                             }
-                        } else {
-                            //Toast.makeText(context , "go" , Toast.LENGTH_LONG).show();
-                            reference.child("members").addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                                        ArrayList<String> subjects = snapshot.getValue(StudentModel.class).getSubjects();
-                                        if (subjects == null){
-                                            subjects = new ArrayList<String>();
-                                        }
-                                        if (subjects.contains(model.getSubjectName())){
-                                            Intent intent = new Intent(context, ShowAvailableUsers.class);
-                                            Bundle bundle = new Bundle();
-                                            bundle.putString("subjectsName", model.getSubjectName());
-                                            bundle.putStringArrayList("usersCode", new ArrayList<String>());
-                                            intent.putExtras(bundle);
-                                            context.startActivity(intent);
-                                        }
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
+                            //Toast.makeText(getApplicationContext() , usersCode.get(0) , Toast.LENGTH_LONG).show();
                         }
-                        //Toast.makeText(getApplicationContext() , usersCode.get(0) , Toast.LENGTH_LONG).show();
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    }
-                });
-            }
-        });
+                        }
+                    });
+                }
+            });
+        } else {
+            holder.subjectContainer.setVisibility(View.GONE);
+            holder.subjectName.setVisibility(View.GONE);
+        }
     }
 
     public static class SubjectHolder extends RecyclerView.ViewHolder{

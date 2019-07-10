@@ -103,13 +103,13 @@ public class StudentsRecAdapter extends FirebaseRecyclerAdapter<StudentModel , S
 
                         switch (model.getStudyGrade()) {
                             case "1":
-                                studentGrade.setText("الصف الاول الثانوي");
+                                studentGrade.setText("الاول الثانوي");
                                 break;
                             case "2":
-                                studentGrade.setText("الصف الثاني الثانوي");
+                                studentGrade.setText("الثاني الثانوي");
                                 break;
                             case "3":
-                                studentGrade.setText("الصف الثالث الثانوي");
+                                studentGrade.setText("الثالث الثانوي");
                                 break;
                         }
                         studentName.setText(model.getName());

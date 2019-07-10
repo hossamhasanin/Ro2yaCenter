@@ -28,6 +28,7 @@ public class ShowAttendantUsers extends AppCompatActivity {
     AttendantUsersAdapter attendantUsersAdapter;
     Bundle bundle;
     ArrayList<String> usersCode;
+    String selectedGrade;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +50,12 @@ public class ShowAttendantUsers extends AppCompatActivity {
         } else {
             usersCode = bundle.getStringArrayList("usersCode");
         }
+        selectedGrade = bundle.getString("selectedGrade");
 
         studentsList = (RecyclerView) findViewById(R.id.students_list);
         Query query = FirebaseDatabase.getInstance().getReference("members");
         firebaseRecyclerOptions = new FirebaseRecyclerOptions.Builder<StudentModel>().setQuery(query , StudentModel.class).build();
-        attendantUsersAdapter = new AttendantUsersAdapter(firebaseRecyclerOptions , this , usersCode);
+        attendantUsersAdapter = new AttendantUsersAdapter(firebaseRecyclerOptions , this , usersCode , selectedGrade);
         studentsList.setAdapter(attendantUsersAdapter);
         studentsList.setLayoutManager(new LinearLayoutManager(this));
     }

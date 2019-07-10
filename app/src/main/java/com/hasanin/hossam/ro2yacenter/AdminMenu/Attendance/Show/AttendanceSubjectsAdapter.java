@@ -34,10 +34,12 @@ public class AttendanceSubjectsAdapter extends FirebaseRecyclerAdapter<SubjectMo
      */
     Activity context;
     public ArrayList<String> recordedSubjects;
-    public AttendanceSubjectsAdapter(@NonNull FirebaseRecyclerOptions<SubjectModel> options , Activity context , ArrayList<String> recordedSubjects) {
+    String selectedGrade;
+    public AttendanceSubjectsAdapter(@NonNull FirebaseRecyclerOptions<SubjectModel> options , Activity context , ArrayList<String> recordedSubjects , String selectedGrade) {
         super(options);
         this.context = context;
         this.recordedSubjects = recordedSubjects;
+        this.selectedGrade = selectedGrade;
 
     }
 
@@ -51,7 +53,7 @@ public class AttendanceSubjectsAdapter extends FirebaseRecyclerAdapter<SubjectMo
 
     @Override
     protected void onBindViewHolder(@NonNull final SubjectHolder holder, int position, @NonNull final SubjectModel model) {
-        if (recordedSubjects.contains(model.getSubjectName())){
+        if (recordedSubjects.contains(model.getSubjectId()) && model.getStudyGrade().contains(selectedGrade)){
             holder.subjectName.setText(model.getSubjectName());
             holder.subjectName.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -59,6 +61,8 @@ public class AttendanceSubjectsAdapter extends FirebaseRecyclerAdapter<SubjectMo
                     Intent intent = new Intent(context , ShowAttendanceDates.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("subjectName" , model.getSubjectName());
+                    bundle.putString("subjectId" , model.getSubjectId());
+                    bundle.putString("selectedGrade", selectedGrade);
                     intent.putExtras(bundle);
                     context.startActivity(intent);
                 }
