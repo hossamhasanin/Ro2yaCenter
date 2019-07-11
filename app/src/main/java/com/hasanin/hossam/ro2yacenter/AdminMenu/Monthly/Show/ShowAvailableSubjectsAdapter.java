@@ -32,9 +32,13 @@ public class ShowAvailableSubjectsAdapter extends FirebaseRecyclerAdapter<Subjec
      * @param options
      */
     Activity context;
-    public ShowAvailableSubjectsAdapter(@NonNull FirebaseRecyclerOptions<SubjectModel> options , Activity context) {
+    String selectedGrade;
+    DatabaseReference reference;
+    public ShowAvailableSubjectsAdapter(@NonNull FirebaseRecyclerOptions<SubjectModel> options , Activity context , String selectedGrade) {
         super(options);
         this.context = context;
+        this.selectedGrade = selectedGrade;
+        this.reference = FirebaseDatabase.getInstance().getReference();
     }
 
     @NonNull
@@ -44,35 +48,41 @@ public class ShowAvailableSubjectsAdapter extends FirebaseRecyclerAdapter<Subjec
         SubjectHolder subjectHolder = new SubjectHolder(layout);
         return subjectHolder;
     }
-    DatabaseReference reference;
+
     @Override
     protected void onBindViewHolder(@NonNull final SubjectHolder holder, int position, @NonNull final SubjectModel model) {
-        reference = FirebaseDatabase.getInstance().getReference();
-        reference.child("monthly").child(model.getSubjectName()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    holder.subjectName.setText(model.getSubjectName());
-                    holder.subjectName.setVisibility(View.VISIBLE);
-                    holder.subjectContainer.setVisibility(View.VISIBLE);
-                    holder.subjectName.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(context , ShowMonths.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putString("subjectName" , model.getSubjectName());
-                            intent.putExtras(bundle);
-                            context.startActivity(intent);
-                        }
-                    });
+        if (model.getStudyGrade().contains(selectedGrade)) {
+            reference.child("monthly").child(model.getSubjectId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        holder.subjectName.setText(model.getSubjectName());
+                        holder.subjectName.setVisibility(View.VISIBLE);
+                        holder.subjectContainer.setVisibility(View.VISIBLE);
+                        holder.subjectName.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(context, ShowMonths.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("subjectName", model.getSubjectName());
+                                bundle.putString("subjectId", model.getSubjectId());
+                                bundle.putString("selectedGrade", selectedGrade);
+                                intent.putExtras(bundle);
+                                context.startActivity(intent);
+                            }
+                        });
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        } else {
+            holder.subjectContainer.setVisibility(View.GONE);
+            holder.subjectName.setVisibility(View.GONE);
+        }
     }
 
     public static class SubjectHolder extends RecyclerView.ViewHolder{

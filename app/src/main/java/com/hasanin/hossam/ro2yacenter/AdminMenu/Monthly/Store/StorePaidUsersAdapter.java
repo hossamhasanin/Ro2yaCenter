@@ -29,11 +29,13 @@ public class StorePaidUsersAdapter extends FirebaseRecyclerAdapter<StudentModel 
     Activity context;
     String subjectName;
     ArrayList<String> selectedUsers;
-    public StorePaidUsersAdapter(@NonNull FirebaseRecyclerOptions<StudentModel> options , Activity context , String subjectName , ArrayList<String> selectedUsers) {
+    String selectedGrade;
+    public StorePaidUsersAdapter(@NonNull FirebaseRecyclerOptions<StudentModel> options , Activity context , String subjectName , ArrayList<String> selectedUsers , String selectedGrade) {
         super(options);
         this.context = context;
         this.subjectName = subjectName;
         this.selectedUsers = selectedUsers;
+        this.selectedGrade = selectedGrade;
     }
 
     @NonNull
@@ -46,7 +48,7 @@ public class StorePaidUsersAdapter extends FirebaseRecyclerAdapter<StudentModel 
     ArrayList<String> existedUsers = new ArrayList<String>();
     @Override
     protected void onBindViewHolder(@NonNull final UserViewHolder holder, int position, @NonNull final StudentModel model) {
-        if (model.getSubjects().contains(subjectName)){
+        if (model.getSubjects().contains(subjectName) && model.getStudyGrade().equals(selectedGrade)){
             existedUsers.add(model.getCode());
             if (selectedUsers == null){
                 selectedUsers = new ArrayList<String>();

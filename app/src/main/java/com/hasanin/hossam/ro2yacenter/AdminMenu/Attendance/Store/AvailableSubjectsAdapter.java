@@ -105,6 +105,7 @@ public class AvailableSubjectsAdapter extends FirebaseRecyclerAdapter<SubjectMod
                                                     Bundle bundle = new Bundle();
                                                     bundle.putString("subjectsName", model.getSubjectName());
                                                     bundle.putString("subjectId", model.getSubjectId());
+                                                    bundle.putString("selectedGrade", selectedGrade);
                                                     bundle.putStringArrayList("usersCode", usersCode);
                                                     intent.putExtras(bundle);
                                                     context.startActivity(intent);
@@ -135,6 +136,7 @@ public class AvailableSubjectsAdapter extends FirebaseRecyclerAdapter<SubjectMod
                                                 Bundle bundle = new Bundle();
                                                 bundle.putString("subjectsName", model.getSubjectName());
                                                 bundle.putString("subjectId", model.getSubjectId());
+                                                bundle.putString("selectedGrade", selectedGrade);
                                                 bundle.putStringArrayList("usersCode", new ArrayList<String>());
                                                 intent.putExtras(bundle);
                                                 context.startActivity(intent);

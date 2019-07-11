@@ -27,9 +27,12 @@ public class MonthsAdapter extends FirebaseRecyclerAdapter<AttendanceModel , Mon
      * @param options
      */
     Activity context;
-    public MonthsAdapter(@NonNull FirebaseRecyclerOptions<AttendanceModel> options , Activity context) {
+    String selectedGrade , subjectId;
+    public MonthsAdapter(@NonNull FirebaseRecyclerOptions<AttendanceModel> options , Activity context , String selectedGrade , String subjectId) {
         super(options);
         this.context = context;
+        this.selectedGrade = selectedGrade;
+        this.subjectId = subjectId;
     }
 
     @NonNull
@@ -51,6 +54,8 @@ public class MonthsAdapter extends FirebaseRecyclerAdapter<AttendanceModel , Mon
                     Intent intent = new Intent(context , PaidUsers.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("subjectName" , model.getSubjectName());
+                    bundle.putString("subjectId" , subjectId);
+                    bundle.putString("selectedGrade" , selectedGrade);
                     intent.putExtras(bundle);
                     context.startActivity(intent);
                 }

@@ -53,7 +53,7 @@ public class PaidUsers extends AppCompatActivity {
         firebaseRecyclerOptions =
                 new FirebaseRecyclerOptions.Builder<StudentModel>().setQuery(query , StudentModel.class).build();
 
-        paidUsersAdapter = new PaidUsersAdapter(firebaseRecyclerOptions , this , bundle.getString("subjectName") , partDate);
+        paidUsersAdapter = new PaidUsersAdapter(firebaseRecyclerOptions , this , bundle.getString("subjectName") , partDate , bundle.getString("selectedGrade") , bundle.getString("subjectId"));
         availableUsersList.setLayoutManager(new LinearLayoutManager(this));
         availableUsersList.setAdapter(paidUsersAdapter);
 

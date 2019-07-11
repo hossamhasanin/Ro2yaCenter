@@ -43,6 +43,32 @@
         app:backgroundTint="@color/blue_dark"
         app:fabSize="normal" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/delete_all_subjects"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:backgroundTint="@color/red_dark"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_delete"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="15dp"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:backgroundTint="#EEB6B3B3"
+        android:visibility="gone"
+        android:src="@drawable/ic_exit_white_2"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="15dp"
+        />
+
     <LinearLayout
         android:id="@+id/grades"
         android:layout_width="match_parent"

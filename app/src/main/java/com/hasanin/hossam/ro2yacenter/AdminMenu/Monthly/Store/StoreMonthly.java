@@ -1,6 +1,8 @@
 package com.hasanin.hossam.ro2yacenter.AdminMenu.Monthly.Store;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.FirebaseDatabase;
@@ -29,6 +32,8 @@ public class StoreMonthly extends AppCompatActivity {
     FirebaseRecyclerOptions<SubjectModel> firebaseRecyclerOptions;
     Query query;
     MonthlyAvailableSubjectsAdapter monthlyAvailableSubjectsAdapter;
+    Button firstGrade , thirdGrade , secondGrade;
+    String selectedGrade = "1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +60,74 @@ public class StoreMonthly extends AppCompatActivity {
         firebaseRecyclerOptions =
                 new FirebaseRecyclerOptions.Builder<SubjectModel>().setQuery(query , SubjectModel.class).build();
 
-        monthlyAvailableSubjectsAdapter = new MonthlyAvailableSubjectsAdapter(firebaseRecyclerOptions , this);
+        monthlyAvailableSubjectsAdapter = new MonthlyAvailableSubjectsAdapter(firebaseRecyclerOptions , this , selectedGrade);
         availableSubjectsList.setLayoutManager(new LinearLayoutManager(this));
         availableSubjectsList.setAdapter(monthlyAvailableSubjectsAdapter);
+
+        firstGrade = findViewById(R.id.show_first_grade);
+        secondGrade = findViewById(R.id.show_second_grade);
+        thirdGrade = findViewById(R.id.show_third_grade);
+
+        firstGrade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedGrade = "1";
+                monthlyAvailableSubjectsAdapter.stopListening();
+                monthlyAvailableSubjectsAdapter = null;
+                monthlyAvailableSubjectsAdapter = new MonthlyAvailableSubjectsAdapter(firebaseRecyclerOptions , StoreMonthly.this , selectedGrade);
+                availableSubjectsList.setLayoutManager(new LinearLayoutManager(StoreMonthly.this));
+                availableSubjectsList.setAdapter(monthlyAvailableSubjectsAdapter);
+                monthlyAvailableSubjectsAdapter.startListening();
+
+                firstGrade.setBackground(ContextCompat.getDrawable(StoreMonthly.this , R.drawable.button_white_rounded_shabe));
+                firstGrade.setTextColor(Color.BLACK);
+                secondGrade.setBackground(ContextCompat.getDrawable(StoreMonthly.this , R.drawable.button_shape_blue));
+                secondGrade.setTextColor(Color.WHITE);
+                thirdGrade.setBackground(ContextCompat.getDrawable(StoreMonthly.this , R.drawable.button_shape_blue));
+                thirdGrade.setTextColor(Color.WHITE);
+            }
+        });
+
+        secondGrade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedGrade = "2";
+                monthlyAvailableSubjectsAdapter.stopListening();
+                monthlyAvailableSubjectsAdapter = null;
+                monthlyAvailableSubjectsAdapter = new MonthlyAvailableSubjectsAdapter(firebaseRecyclerOptions , StoreMonthly.this , selectedGrade);
+                availableSubjectsList.setLayoutManager(new LinearLayoutManager(StoreMonthly.this));
+                availableSubjectsList.setAdapter(monthlyAvailableSubjectsAdapter);
+                monthlyAvailableSubjectsAdapter.startListening();
+
+                firstGrade.setBackground(ContextCompat.getDrawable(StoreMonthly.this , R.drawable.button_shape_blue));
+                firstGrade.setTextColor(Color.WHITE);
+                secondGrade.setBackground(ContextCompat.getDrawable(StoreMonthly.this , R.drawable.button_white_rounded_shabe));
+                secondGrade.setTextColor(Color.BLACK);
+                thirdGrade.setBackground(ContextCompat.getDrawable(StoreMonthly.this , R.drawable.button_shape_blue));
+                thirdGrade.setTextColor(Color.WHITE);
+            }
+        });
+
+
+        thirdGrade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedGrade = "3";
+                monthlyAvailableSubjectsAdapter.stopListening();
+                monthlyAvailableSubjectsAdapter = null;
+                monthlyAvailableSubjectsAdapter = new MonthlyAvailableSubjectsAdapter(firebaseRecyclerOptions , StoreMonthly.this , selectedGrade);
+                availableSubjectsList.setLayoutManager(new LinearLayoutManager(StoreMonthly.this));
+                availableSubjectsList.setAdapter(monthlyAvailableSubjectsAdapter);
+                monthlyAvailableSubjectsAdapter.startListening();
+
+                firstGrade.setBackground(ContextCompat.getDrawable(StoreMonthly.this , R.drawable.button_shape_blue));
+                firstGrade.setTextColor(Color.WHITE);
+                secondGrade.setBackground(ContextCompat.getDrawable(StoreMonthly.this , R.drawable.button_shape_blue));
+                secondGrade.setTextColor(Color.WHITE);
+                thirdGrade.setBackground(ContextCompat.getDrawable(StoreMonthly.this , R.drawable.button_white_rounded_shabe));
+                thirdGrade.setTextColor(Color.BLACK);
+            }
+        });
     }
 
     @Override

@@ -37,7 +37,7 @@ public class ShowAvailableUsers extends AppCompatActivity {
     RecyclerView availableUsersList;
     AvailableUsersAdapter availableUsersAdapter;
     String subjectName;
-    String subjectId;
+    String subjectId , selectedGrade;
     DatabaseReference reference;
     ArrayList<String> usersCode;
     Date date;
@@ -64,7 +64,9 @@ public class ShowAvailableUsers extends AppCompatActivity {
         bundle = getIntent().getExtras();
         subjectName = bundle.getString("subjectsName");
         subjectId = bundle.getString("subjectId");
+        selectedGrade = bundle.getString("selectedGrade");
         usersCode = bundle.getStringArrayList("usersCode");
+
 
         date = new Date();
         currenttime = date.getTime();
@@ -77,7 +79,7 @@ public class ShowAvailableUsers extends AppCompatActivity {
         Query query = FirebaseDatabase.getInstance().getReference("members");
         FirebaseRecyclerOptions<StudentModel> firebaseRecyclerOptions =
                 new FirebaseRecyclerOptions.Builder<StudentModel>().setQuery(query , StudentModel.class).build();
-        availableUsersAdapter = new AvailableUsersAdapter(firebaseRecyclerOptions , this , subjectName , usersCode);
+        availableUsersAdapter = new AvailableUsersAdapter(firebaseRecyclerOptions , this , subjectName , usersCode , selectedGrade);
         availableUsersList = (RecyclerView) findViewById(R.id.available_users);
         availableUsersList.setAdapter(availableUsersAdapter);
         availableUsersList.setLayoutManager(new LinearLayoutManager(this));

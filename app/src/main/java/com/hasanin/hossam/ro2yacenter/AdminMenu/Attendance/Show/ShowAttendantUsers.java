@@ -37,12 +37,8 @@ public class ShowAttendantUsers extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_backword_white);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         bundle = getIntent().getExtras();
         getSupportActionBar().setTitle(bundle.getString("record"));
         if (bundle.getStringArrayList("usersCode").equals(null)){

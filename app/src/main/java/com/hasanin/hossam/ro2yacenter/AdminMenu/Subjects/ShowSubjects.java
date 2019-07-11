@@ -1,6 +1,7 @@
 package com.hasanin.hossam.ro2yacenter.AdminMenu.Subjects;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -43,6 +44,8 @@ public class ShowSubjects extends AppCompatActivity {
     RecyclerView subjectsList;
     SubjectsRecAdapter subjectsRecAdapter;
     FloatingActionButton addMoreSubjects;
+    FloatingActionButton deleteAll;
+    FloatingActionButton close;
     TextView emptyMessError;
     RelativeLayout subjectListContainer;
     Button firstGrade , thirdGrade , secondGrade;
@@ -50,6 +53,7 @@ public class ShowSubjects extends AppCompatActivity {
     Query query;
     ShowSubjects context = this;
     String selectedGrade = "1";
+    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +62,7 @@ public class ShowSubjects extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_backword_white);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Check if the user is online
 //        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
@@ -82,7 +81,8 @@ public class ShowSubjects extends AppCompatActivity {
 //            }
 //        });
 
-        query = FirebaseDatabase.getInstance().getReference().child("subjects");
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        query = databaseReference.child("subjects");
         query.keepSynced(true);
         firebaseRecyclerOptions =
                 new FirebaseRecyclerOptions.Builder<SubjectModel>().setQuery(query , SubjectModel.class).build();
@@ -175,6 +175,60 @@ public class ShowSubjects extends AppCompatActivity {
                 secondGrade.setTextColor(Color.WHITE);
                 thirdGrade.setBackground(ContextCompat.getDrawable(context , R.drawable.button_white_rounded_shabe));
                 thirdGrade.setTextColor(Color.BLACK);
+            }
+        });
+
+        deleteAll = (FloatingActionButton) findViewById(R.id.delete_all_subjects);
+        close = (FloatingActionButton) findViewById(R.id.close);
+
+        deleteAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final ProgressDialog progressDialog = new ProgressDialog(context);
+                progressDialog.setMessage("يتم المسح انتظر ...");
+                progressDialog.show();
+                for (final SubjectModel subject : subjectsRecAdapter.checked){
+                    databaseReference.child("subjects").child(subject.getSubjectId()).removeValue();
+                    databaseReference.child("attendance").child(subject.getSubjectId()).removeValue();
+                    databaseReference.child("monthly").child(subject.getSubjectId()).removeValue();
+                    databaseReference.child("members").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                ArrayList<String> subjects = snapshot.getValue(StudentModel.class).getSubjects();
+                                if (subjects != null && !subjects.isEmpty()) {
+                                    subjects.remove(subject.getSubjectName());
+                                    databaseReference.child("members").child(snapshot.getKey()).child("subjects").removeValue();
+                                    databaseReference.child("members").child(snapshot.getKey()).child("subjects").setValue(subjects);
+                                }
+                            }
+                            progressDialog.dismiss();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+        });
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                subjectsRecAdapter.checked.clear();
+                subjectsRecAdapter.stopListening();
+                subjectsRecAdapter = null;
+                subjectsRecAdapter = new SubjectsRecAdapter(firebaseRecyclerOptions , context , selectedGrade);
+                subjectsList.setLayoutManager(new LinearLayoutManager(context));
+                subjectsList.setAdapter(subjectsRecAdapter);
+                subjectsRecAdapter.startListening();
+
+                close.setVisibility(View.GONE);
+                deleteAll.setVisibility(View.GONE);
+                addMoreSubjects.setVisibility(View.VISIBLE);
+
             }
         });
 

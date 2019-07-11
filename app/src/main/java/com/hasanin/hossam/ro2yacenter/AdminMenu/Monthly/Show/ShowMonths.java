@@ -42,9 +42,9 @@ public class ShowMonths extends AppCompatActivity {
         bundle = getIntent().getExtras();
 
         monthsList = (RecyclerView) findViewById(R.id.months_list);
-        Query query = FirebaseDatabase.getInstance().getReference().child("attendance").child(bundle.getString("subjectName"));
+        Query query = FirebaseDatabase.getInstance().getReference().child("attendance").child(bundle.getString("subjectId"));
         firebaseRecyclerOptions = new FirebaseRecyclerOptions.Builder<AttendanceModel>().setQuery(query , AttendanceModel.class).build();
-        monthsAdapter = new MonthsAdapter(firebaseRecyclerOptions , this);
+        monthsAdapter = new MonthsAdapter(firebaseRecyclerOptions , this , bundle.getString("selectedGrade") , bundle.getString("subjectId"));
         monthsList.setAdapter(monthsAdapter);
         monthsList.setLayoutManager(new LinearLayoutManager(this));
     }

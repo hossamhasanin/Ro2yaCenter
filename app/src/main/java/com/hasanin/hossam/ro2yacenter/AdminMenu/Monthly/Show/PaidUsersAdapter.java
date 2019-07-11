@@ -36,12 +36,14 @@ public class PaidUsersAdapter extends FirebaseRecyclerAdapter<StudentModel , Pai
      * @param options
      */
     Activity context;
-    String subjectName , partDate;
-    public PaidUsersAdapter(@NonNull FirebaseRecyclerOptions<StudentModel> options , Activity context , String subjectName , String partDate) {
+    String subjectName , partDate , selectedGrade , subjectId;
+    public PaidUsersAdapter(@NonNull FirebaseRecyclerOptions<StudentModel> options , Activity context , String subjectName , String partDate , String selectedGrade , String subjectId) {
         super(options);
         this.context = context;
         this.subjectName = subjectName;
         this.partDate = partDate;
+        this.selectedGrade = selectedGrade;
+        this.subjectId = subjectId;
     }
 
     @NonNull
@@ -57,7 +59,7 @@ public class PaidUsersAdapter extends FirebaseRecyclerAdapter<StudentModel , Pai
     ArrayList<String> paidUsers;
     @Override
     protected void onBindViewHolder(@NonNull final StudentHolder holder, int position, @NonNull final StudentModel model) {
-        if (model.getSubjects().contains(subjectName)) {
+        if (model.getSubjects().contains(subjectName) && model.getStudyGrade().equals(selectedGrade)) {
             paidUsers = new ArrayList<String>();
             holder.studentName.setText(model.getName());
             reference = FirebaseDatabase.getInstance().getReference();
@@ -74,7 +76,7 @@ public class PaidUsersAdapter extends FirebaseRecyclerAdapter<StudentModel , Pai
                     studentCode.setText(model.getCode());
                     final TextView is_paid = (TextView) layout.findViewById(R.id.is_paid);
                     final Button changePaidStatus = (Button) layout.findViewById(R.id.change_paid_status);
-                    reference.child("monthly").child(subjectName).child(partDate).addListenerForSingleValueEvent(new ValueEventListener() {
+                    reference.child("monthly").child(subjectId).child(partDate).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             MonthlyModel monthlyModel = dataSnapshot.getValue(MonthlyModel.class);
@@ -109,7 +111,7 @@ public class PaidUsersAdapter extends FirebaseRecyclerAdapter<StudentModel , Pai
                     changePaidStatus.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            reference.child("monthly").child(subjectName).child(partDate).addListenerForSingleValueEvent(new ValueEventListener() {
+                            reference.child("monthly").child(subjectId).child(partDate).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     MonthlyModel monthlyModel = dataSnapshot.getValue(MonthlyModel.class);
@@ -120,7 +122,7 @@ public class PaidUsersAdapter extends FirebaseRecyclerAdapter<StudentModel , Pai
                                     if (is_paidStatus){
                                         is_paidStatus = false;
                                         paidUsers.remove(model.getCode());
-                                        reference.child("monthly").child(subjectName).child(partDate).child("usersCode").setValue(paidUsers).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        reference.child("monthly").child(subjectId).child(partDate).child("usersCode").setValue(paidUsers).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 is_paid.setText("لم يتم الدفع");
@@ -132,7 +134,7 @@ public class PaidUsersAdapter extends FirebaseRecyclerAdapter<StudentModel , Pai
                                     } else {
                                         is_paidStatus = true;
                                         paidUsers.add(model.getCode());
-                                        reference.child("monthly").child(subjectName).child(partDate).child("usersCode").setValue(paidUsers).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        reference.child("monthly").child(subjectId).child(partDate).child("usersCode").setValue(paidUsers).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 is_paid.setText("تم الدفع");

@@ -53,12 +53,7 @@ public class ShowAttendanteSubjects extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_backword_white);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recordedSubjects = new ArrayList<String>();
         subjectsList = (RecyclerView) findViewById(R.id.subjects_list);

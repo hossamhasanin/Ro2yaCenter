@@ -40,6 +40,7 @@ public class StoreUsersMonthly extends AppCompatActivity {
     RelativeLayout usersContainer;
     StorePaidUsersAdapter storePaidUsersAdapter;
     String subjectName;
+    String subjectId , selectedGrade;
     DatabaseReference reference;
     ArrayList<String> usersCode;
     Date date;
@@ -65,6 +66,8 @@ public class StoreUsersMonthly extends AppCompatActivity {
         });
         bundle = getIntent().getExtras();
         subjectName = bundle.getString("subjectName");
+        subjectId = bundle.getString("subjectId");
+        selectedGrade = bundle.getString("selectedGrade");
         getSupportActionBar().setTitle(subjectName);
 
         date = new Date();
@@ -84,12 +87,12 @@ public class StoreUsersMonthly extends AppCompatActivity {
         Query query = FirebaseDatabase.getInstance().getReference("members");
         FirebaseRecyclerOptions<StudentModel> firebaseRecyclerOptions =
                 new FirebaseRecyclerOptions.Builder<StudentModel>().setQuery(query , StudentModel.class).build();
-        storePaidUsersAdapter = new StorePaidUsersAdapter(firebaseRecyclerOptions , this , subjectName , usersCode);
+        storePaidUsersAdapter = new StorePaidUsersAdapter(firebaseRecyclerOptions , this , subjectName , usersCode , selectedGrade);
         availableUsersList.setAdapter(storePaidUsersAdapter);
         availableUsersList.setLayoutManager(new LinearLayoutManager(this));
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("monthly");
-        reference.child(subjectName).child(partDate).addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.child(subjectId).child(partDate).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
@@ -120,7 +123,7 @@ public class StoreUsersMonthly extends AppCompatActivity {
             reference = FirebaseDatabase.getInstance().getReference().child("monthly");
             //recordedId = reference.child(subjectName).push().getKey();
             MonthlyModel monthlyModel = new MonthlyModel(subjectName , currentMonth , currentYear , storePaidUsersAdapter.getSelectedUsers());
-            reference.child(subjectName).child(partDate).setValue(monthlyModel);
+            reference.child(subjectId).child(partDate).setValue(monthlyModel);
             Toast.makeText(getApplicationContext() , "تم تسجيل الشهريات المدفوعة" , Toast.LENGTH_LONG).show();
         }
         return super.onOptionsItemSelected(item);
