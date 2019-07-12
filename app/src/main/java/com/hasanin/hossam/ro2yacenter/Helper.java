@@ -16,10 +16,13 @@ public class Helper {
         String code = sharedPreferences.getString("code" , "none");
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("code" , "none");
+        editor.remove("isadmin");
         editor.commit();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("members");
-        databaseReference.child(code).child("last_login").setValue(0);
-        Toast.makeText(context , "لقد سجلت الخروج" , Toast.LENGTH_SHORT).show();
+        if (!code.equals("none")){
+            databaseReference.child(code).child("last_login").setValue(0);
+            Toast.makeText(context , "لقد سجلت الخروج" , Toast.LENGTH_SHORT).show();
+        }
         Intent intent = new Intent(context , LogInActivity.class);
         context.startActivity(intent);
         context.finish();

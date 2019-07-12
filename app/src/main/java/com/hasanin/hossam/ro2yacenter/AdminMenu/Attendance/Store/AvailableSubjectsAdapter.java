@@ -39,9 +39,9 @@ public class AvailableSubjectsAdapter extends FirebaseRecyclerAdapter<SubjectMod
      *
      * @param options
      */
-    public Activity context;
+    public StoreAttendance context;
     String selectedGrade;
-    public AvailableSubjectsAdapter(@NonNull FirebaseRecyclerOptions<SubjectModel> options , Activity context , String selectedGrade) {
+    public AvailableSubjectsAdapter(@NonNull FirebaseRecyclerOptions<SubjectModel> options , StoreAttendance context , String selectedGrade) {
         super(options);
         this.context = context;
         this.selectedGrade = selectedGrade;

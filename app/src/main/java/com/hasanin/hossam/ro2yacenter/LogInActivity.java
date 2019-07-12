@@ -7,13 +7,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import java.text.SimpleDateFormat;
-import android.icu.util.Calendar;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.ArraySet;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -33,8 +32,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.hasanin.hossam.ro2yacenter.AdminMenu.AdminMenuActivity;
+import com.hasanin.hossam.ro2yacenter.AdminMenu.Students.StudentModel;
+import com.hasanin.hossam.ro2yacenter.Parents.ParentsMainMenu;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -67,13 +73,34 @@ public class LogInActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("session" , Context.MODE_PRIVATE);
         String code = sharedPreferences.getString("code" , "none");
+        String name = sharedPreferences.getString("name" , "none");
+        String selectedGrade = sharedPreferences.getString("selectedGrade" , "none");
+        Set<String> subjectsSet = sharedPreferences.getStringSet("subjects" , new HashSet<String>());
+        ArrayList subjects = new ArrayList();
+        subjects.addAll(subjects);
+
+        Boolean loginAdminCheck = sharedPreferences.getBoolean("isadmin" , false);
         if (!code.equals("none")){
-            Intent intent = new Intent(context, AdminMenuActivity.class);
-            Bundle bundle = new Bundle();
-            //bundle.putBoolean("rightComing", true);
-            intent.putExtras(bundle);
-            startActivity(intent);
-            finish();
+            Log.v("Login" , "Here");
+            if (loginAdminCheck){
+                Intent intent = new Intent(context, AdminMenuActivity.class);
+                Bundle bundle = new Bundle();
+                //bundle.putBoolean("rightComing", true);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                finish();
+            } else {
+                Intent intent2 = new Intent(context, ParentsMainMenu.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("name", name);
+                bundle.putString("code", code);
+                bundle.putString("selectedGrade", selectedGrade);
+                bundle.putStringArrayList("studentSubjects", subjects);
+                intent2.putExtras(bundle);
+                startActivity(intent2);
+                finish();
+            }
+
         }
 
         //arabicCairoFont = Typeface.createFromAsset(getAssets() , "fonts/Cairo-Regular.ttf");
@@ -183,28 +210,52 @@ public class LogInActivity extends AppCompatActivity {
 //                       float daysBetween = (df / (1000*60*60*24));
                         users.child(code).child("last_login").setValue(currentDate);
                     }
+                    StudentModel student = dataSnapshot.child(code).getValue(StudentModel.class);
                     SharedPreferences sharedPreferences = context.getSharedPreferences("session" , Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("code" , code);
+                    editor.putBoolean("isadmin", student.isIsadmin());
+                    Set<String> subjectsSet = new HashSet<String>();
+                    subjectsSet.addAll(student.getSubjects());
+                    editor.putStringSet("subjects" , subjectsSet);
+                    editor.putString("selectedGrade" , student.getStudyGrade());
                     editor.putString("name" , dataSnapshot.child(code).child("name").getValue(String.class));
-                    editor.commit();
                     if (isAdmin) {
-                        if (dataSnapshot.child(code).child("isadmin").getValue(Boolean.class)) {
-                            Intent intent = new Intent(context, AdminMenuActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putString("name", dataSnapshot.child(code).child("name").getValue(String.class));
-                            bundle.putBoolean("isAdmin", isAdmin);
-                            bundle.putBoolean("rightComing", true);
-                            intent.putExtras(bundle);
+                        if (student.isIsadmin()) {
+
+
+                            editor.apply();
+//                            Intent intent = new Intent(context, AdminMenuActivity.class);
+//                            Bundle bundle = new Bundle();
+//                            bundle.putString("name", student.getName());
+//                            bundle.putBoolean("isAdmin", isAdmin);
+//                            bundle.putBoolean("rightComing", true);
+//                            intent.putExtras(bundle);
                             progressDialog.dismiss();
-                            context.startActivity(intent);
-                            context.finish();
+//                            context.startActivity(intent);
+//                            context.finish();
                         } else {
                             progressDialog.dismiss();
                             Toast.makeText(context, "أنك من اولياء الأمور", Toast.LENGTH_LONG).show();
                         }
                     }else{
                         // Parents part
+                        if (!student.isIsadmin()) {
+                            editor.apply();
+//                            Intent intent2 = new Intent(context, ParentsMainMenu.class);
+//                            Bundle bundle = new Bundle();
+//                            bundle.putString("name", student.getName());
+//                            bundle.putString("code", code);
+//                            bundle.putString("selectedGrade", student.getStudyGrade());
+//                            bundle.putStringArrayList("studentSubjects", student.getSubjects());
+//                            intent2.putExtras(bundle);
+                            progressDialog.dismiss();
+//                            context.startActivity(intent2);
+//                            context.finish();
+                        } else {
+                            progressDialog.dismiss();
+                            Toast.makeText(context, "ذلك كود للمدراء", Toast.LENGTH_LONG).show();
+                        }
                     }
                 } else {
                     Toast.makeText(context , "كود خاطأ , بطل  لعب" , Toast.LENGTH_SHORT).show();

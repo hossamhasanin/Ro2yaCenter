@@ -69,6 +69,7 @@ public class SubjectsRecAdapter extends FirebaseRecyclerAdapter<SubjectModel , S
     @Override
     protected void onBindViewHolder(@NonNull final SubjectHolder holder, final int position, @NonNull final SubjectModel model) {
         if (model.getStudyGrade().contains(selectedGrade)) {
+            context.supjectsListener.accept(Integer.valueOf(context.supjectsListener.getValue().toString()) + 1);
             holder.subjectName.setText(model.getSubjectName());
             holder.subjectName.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -191,6 +192,7 @@ public class SubjectsRecAdapter extends FirebaseRecyclerAdapter<SubjectModel , S
             });
         } else {
             holder.container.setVisibility(View.GONE);
+            holder.subjectName.setVisibility(View.VISIBLE);
         }
 
     }
@@ -204,7 +206,7 @@ public class SubjectsRecAdapter extends FirebaseRecyclerAdapter<SubjectModel , S
     public static class SubjectHolder extends RecyclerView.ViewHolder{
 
         public TextView subjectName;
-        LinearLayout container;
+        public LinearLayout container;
         public SubjectHolder(View itemView) {
             super(itemView);
             subjectName = (TextView) itemView.findViewById(R.id.subject);

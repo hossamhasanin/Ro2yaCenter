@@ -84,6 +84,7 @@ public class StudentsRecAdapter extends FirebaseRecyclerAdapter<StudentModel , S
             model.setSubjects(s);
         }
         if (!model.isIsadmin() && !model.getSubjects().get(0).equals("none") && model.getStudyGrade().equals(selectedGrade)) {
+            context.studentListener.accept(Integer.valueOf(context.studentListener.getValue().toString()) + 1);
             holder.studentName.setText(model.getName());
             holder.studentName.setOnClickListener(new View.OnClickListener() {
                 @Override

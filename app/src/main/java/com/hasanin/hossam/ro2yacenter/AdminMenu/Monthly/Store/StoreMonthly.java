@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.FirebaseDatabase;
@@ -19,11 +20,15 @@ import com.google.firebase.database.Query;
 import com.hasanin.hossam.ro2yacenter.AdminMenu.Subjects.SubjectModel;
 import com.hasanin.hossam.ro2yacenter.Helper;
 import com.hasanin.hossam.ro2yacenter.R;
+import com.jakewharton.rxrelay2.BehaviorRelay;
 
 import org.joda.time.DateTime;
 
 import java.util.Date;
 
+import io.reactivex.Observer;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class StoreMonthly extends AppCompatActivity {
@@ -128,7 +133,9 @@ public class StoreMonthly extends AppCompatActivity {
                 thirdGrade.setTextColor(Color.BLACK);
             }
         });
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

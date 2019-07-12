@@ -20,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.hasanin.hossam.ro2yacenter.AdminMenu.AdminMenuActivity;
+import com.hasanin.hossam.ro2yacenter.AdminMenu.Students.StudentModel;
+import com.hasanin.hossam.ro2yacenter.Parents.ParentsMainMenu;
 
 import java.net.InetAddress;
 import java.util.Date;
@@ -72,14 +74,29 @@ public class LauncherActivity extends AppCompatActivity {
                         long df = currentDate - lastLogin;
                         float daysBetween = (df / (1000 * 60 * 60 * 24));
                         if (daysBetween <= 4 && daysBetween >= 0) {
-                            Intent intent = new Intent(getApplicationContext(), AdminMenuActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putString("name", dataSnapshot.child(code).child("name").getValue(String.class));
-                            bundle.putBoolean("isAdmin", dataSnapshot.child(code).child("isadmin").getValue(Boolean.class));
-                            //bundle.putBoolean("rightComing", true);
-                            intent.putExtras(bundle);
-                            startActivity(intent);
-                            finish();
+                            Boolean isAdmin = dataSnapshot.child(code).child("isadmin").getValue(Boolean.class);
+                            StudentModel student = dataSnapshot.child(code).getValue(StudentModel.class);
+                            if (isAdmin) {
+                                Intent intent = new Intent(getApplicationContext(), AdminMenuActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("name", dataSnapshot.child(code).child("name").getValue(String.class));
+                                bundle.putBoolean("isAdmin", isAdmin);
+                                //bundle.putBoolean("rightComing", true);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                // Patents part
+                                Intent intent = new Intent(LauncherActivity.this, ParentsMainMenu.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("name", student.getName());
+                                bundle.putString("code", code);
+                                bundle.putString("selectedGrade", student.getStudyGrade());
+                                bundle.putStringArrayList("studentSubjects", student.getSubjects());
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                                finish();
+                            }
                         } else {
                             Intent intent = new Intent(getApplicationContext(), LogInActivity.class);
                             startActivity(intent);

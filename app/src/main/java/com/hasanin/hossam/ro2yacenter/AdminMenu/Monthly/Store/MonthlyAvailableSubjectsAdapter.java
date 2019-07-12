@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.firebase.ui.common.ChangeEventType;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -29,9 +30,9 @@ public class MonthlyAvailableSubjectsAdapter extends FirebaseRecyclerAdapter<Sub
      *
      * @param options
      */
-    Activity context;
+    StoreMonthly context;
     String selectedGrade;
-    public MonthlyAvailableSubjectsAdapter(@NonNull FirebaseRecyclerOptions<SubjectModel> options , Activity context , String selectedGrade) {
+    public MonthlyAvailableSubjectsAdapter(@NonNull FirebaseRecyclerOptions<SubjectModel> options , StoreMonthly context , String selectedGrade) {
         super(options);
         this.context = context;
         this.selectedGrade = selectedGrade;
@@ -82,7 +83,6 @@ public class MonthlyAvailableSubjectsAdapter extends FirebaseRecyclerAdapter<Sub
             holder.subjectName.setVisibility(View.GONE);
         }
     }
-
 
     public static class SubjectHolder extends RecyclerView.ViewHolder{
 

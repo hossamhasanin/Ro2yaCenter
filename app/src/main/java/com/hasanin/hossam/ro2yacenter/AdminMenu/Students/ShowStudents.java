@@ -38,9 +38,14 @@ import com.hasanin.hossam.ro2yacenter.AdminMenu.Subjects.SubjectModel;
 import com.hasanin.hossam.ro2yacenter.AdminMenu.Subjects.SubjectsRecAdapter;
 import com.hasanin.hossam.ro2yacenter.Helper;
 import com.hasanin.hossam.ro2yacenter.R;
+import com.jakewharton.rxrelay2.BehaviorRelay;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
+import io.reactivex.Observer;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ShowStudents extends AppCompatActivity {
@@ -70,6 +75,9 @@ public class ShowStudents extends AppCompatActivity {
                 }
             };
     String selectedGrade = "1";
+
+    BehaviorRelay studentListener = BehaviorRelay.createDefault(0);
+    CompositeDisposable bag = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +140,11 @@ public class ShowStudents extends AppCompatActivity {
         firstGrade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                studentListener.accept(0);
+                if (studentsList.getVisibility() == View.GONE){
+                    emptyMessError.setVisibility(View.GONE);
+                }
+
                 selectedGrade = "1";
                 studentsRecAdapter.stopListening();
                 studentsRecAdapter = null;
@@ -152,6 +165,11 @@ public class ShowStudents extends AppCompatActivity {
         secondGrade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                studentListener.accept(0);
+                if (studentsList.getVisibility() == View.GONE){
+                    emptyMessError.setVisibility(View.GONE);
+                }
+
                 selectedGrade = "2";
                 studentsRecAdapter.stopListening();
                 studentsRecAdapter = null;
@@ -173,6 +191,11 @@ public class ShowStudents extends AppCompatActivity {
         thirdGrade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                studentListener.accept(0);
+                if (studentsList.getVisibility() == View.GONE){
+                    emptyMessError.setVisibility(View.GONE);
+                }
+
                 selectedGrade = "3";
                 studentsRecAdapter.stopListening();
                 studentsRecAdapter = null;
@@ -274,6 +297,35 @@ public class ShowStudents extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        studentListener.subscribe(new Observer() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                bag.add(d);
+            }
+
+            @Override
+            public void onNext(Object o) {
+                //Log.v("StudentRelay" , o.toString());
+                int exists = Integer.valueOf(o.toString());
+                if (exists == 0){
+                    //Log.v("StudentRelay" , "no");
+                    emptyMessError.setVisibility(View.VISIBLE);
+                } else {
+                    emptyMessError.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
 
             }
         });

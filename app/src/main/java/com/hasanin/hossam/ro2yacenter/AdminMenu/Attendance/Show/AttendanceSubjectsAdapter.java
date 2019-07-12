@@ -32,10 +32,10 @@ public class AttendanceSubjectsAdapter extends FirebaseRecyclerAdapter<SubjectMo
      *
      * @param options
      */
-    Activity context;
+    ShowAttendanteSubjects context;
     public ArrayList<String> recordedSubjects;
     String selectedGrade;
-    public AttendanceSubjectsAdapter(@NonNull FirebaseRecyclerOptions<SubjectModel> options , Activity context , ArrayList<String> recordedSubjects , String selectedGrade) {
+    public AttendanceSubjectsAdapter(@NonNull FirebaseRecyclerOptions<SubjectModel> options , ShowAttendanteSubjects context , ArrayList<String> recordedSubjects , String selectedGrade) {
         super(options);
         this.context = context;
         this.recordedSubjects = recordedSubjects;
@@ -54,6 +54,7 @@ public class AttendanceSubjectsAdapter extends FirebaseRecyclerAdapter<SubjectMo
     @Override
     protected void onBindViewHolder(@NonNull final SubjectHolder holder, int position, @NonNull final SubjectModel model) {
         if (recordedSubjects.contains(model.getSubjectId()) && model.getStudyGrade().contains(selectedGrade)){
+            context.supjectsListener.accept(Integer.valueOf(context.supjectsListener.getValue().toString()) + 1);
             holder.subjectName.setText(model.getSubjectName());
             holder.subjectName.setOnClickListener(new View.OnClickListener() {
                 @Override

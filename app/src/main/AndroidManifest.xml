@@ -13,9 +13,12 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Parents.ParentsMainMenu"></activity>
         <activity android:name=".LogInActivity" />
         <activity android:name=".AdminMenu.AdminMenuActivity" />
-        <activity android:name=".AdminMenu.Subjects.AddSubject" android:parentActivityName=".AdminMenu.Subjects.ShowSubjects" />
+        <activity
+            android:name=".AdminMenu.Subjects.AddSubject"
+            android:parentActivityName=".AdminMenu.Subjects.ShowSubjects" />
         <activity android:name=".LauncherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +26,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AdminMenu.Subjects.ShowSubjects" android:parentActivityName=".AdminMenu.AdminMenuActivity">
+        <activity
+            android:name=".AdminMenu.Subjects.ShowSubjects"
+            android:parentActivityName=".AdminMenu.AdminMenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -37,9 +42,11 @@
         </activity>
         <activity
             android:name=".AdminMenu.Students.AddStudent"
-            android:theme="@style/AppTheme"
-            android:parentActivityName=".AdminMenu.Students.ShowStudents"/>
-        <activity android:name=".AdminMenu.Students.ShowStudents" android:parentActivityName=".AdminMenu.AdminMenuActivity">
+            android:parentActivityName=".AdminMenu.Students.ShowStudents"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".AdminMenu.Students.ShowStudents"
+            android:parentActivityName=".AdminMenu.AdminMenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -51,16 +58,28 @@
                 android:name="android.app.default_searchable"
                 android:value=".AdminMenu.Students.ShowStudents" />
         </activity>
-        <activity android:name=".AdminMenu.Attendance.Store.StoreAttendance" android:parentActivityName=".AdminMenu.AdminMenuActivity" />
+        <activity
+            android:name=".AdminMenu.Attendance.Store.StoreAttendance"
+            android:parentActivityName=".AdminMenu.AdminMenuActivity" />
         <activity android:name=".AdminMenu.Attendance.Store.ShowAvailableUsers" />
-        <activity android:name=".AdminMenu.Attendance.Show.ShowAttendanteSubjects" android:parentActivityName=".AdminMenu.AdminMenuActivity" />
-        <activity android:name=".AdminMenu.Attendance.Show.ShowAttendantUsers" android:parentActivityName=".AdminMenu.Attendance.Show.ShowAttendanteSubjects" />
+        <activity
+            android:name=".AdminMenu.Attendance.Show.ShowAttendanteSubjects"
+            android:parentActivityName=".AdminMenu.AdminMenuActivity" />
+        <activity
+            android:name=".AdminMenu.Attendance.Show.ShowAttendantUsers"
+            android:parentActivityName=".AdminMenu.Attendance.Show.ShowAttendanteSubjects" />
         <activity android:name=".AdminMenu.Attendance.Show.ShowAttendanceDates" />
-        <activity android:name=".AdminMenu.Monthly.Store.StoreMonthly" android:parentActivityName=".AdminMenu.AdminMenuActivity" />
+        <activity
+            android:name=".AdminMenu.Monthly.Store.StoreMonthly"
+            android:parentActivityName=".AdminMenu.AdminMenuActivity" />
         <activity android:name=".AdminMenu.Monthly.Show.ShowMonths" />
         <activity android:name=".AdminMenu.Monthly.Store.StoreUsersMonthly" />
-        <activity android:name=".AdminMenu.Monthly.Show.ShowMonthlySubjects" android:parentActivityName=".AdminMenu.AdminMenuActivity" />
-        <activity android:name=".AdminMenu.Monthly.Show.PaidUsers" android:parentActivityName=".AdminMenu.Monthly.Show.ShowMonthlySubjects"></activity>
+        <activity
+            android:name=".AdminMenu.Monthly.Show.ShowMonthlySubjects"
+            android:parentActivityName=".AdminMenu.AdminMenuActivity" />
+        <activity
+            android:name=".AdminMenu.Monthly.Show.PaidUsers"
+            android:parentActivityName=".AdminMenu.Monthly.Show.ShowMonthlySubjects" />
     </application>
 
 </manifest>

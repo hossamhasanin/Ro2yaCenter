@@ -30,9 +30,13 @@ import com.hasanin.hossam.ro2yacenter.AdminMenu.Attendance.Store.StoreAttendance
 import com.hasanin.hossam.ro2yacenter.AdminMenu.Subjects.SubjectModel;
 import com.hasanin.hossam.ro2yacenter.Helper;
 import com.hasanin.hossam.ro2yacenter.R;
+import com.jakewharton.rxrelay2.BehaviorRelay;
 
 import java.util.ArrayList;
 
+import io.reactivex.Observer;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ShowAttendanteSubjects extends AppCompatActivity {
@@ -46,6 +50,9 @@ public class ShowAttendanteSubjects extends AppCompatActivity {
     AttendanceSubjectsAdapter attendanceSubjectsAdapter;
     ArrayList<String> recordedSubjects;
     Activity context;
+    BehaviorRelay supjectsListener = BehaviorRelay.createDefault(0);
+    CompositeDisposable bag = new CompositeDisposable();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +100,11 @@ public class ShowAttendanteSubjects extends AppCompatActivity {
         firstGrade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                supjectsListener.accept(0);
+                if (subjectsList.getVisibility() == View.GONE){
+                    subjectsList.setVisibility(View.GONE);
+                }
+
                 selectedGrade = "1";
                 attendanceSubjectsAdapter.stopListening();
                 attendanceSubjectsAdapter = null;
@@ -113,6 +125,11 @@ public class ShowAttendanteSubjects extends AppCompatActivity {
         secondGrade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                supjectsListener.accept(0);
+                if (subjectsList.getVisibility() == View.GONE){
+                    subjectsList.setVisibility(View.GONE);
+                }
+
                 selectedGrade = "2";
                 attendanceSubjectsAdapter.stopListening();
                 attendanceSubjectsAdapter = null;
@@ -134,6 +151,11 @@ public class ShowAttendanteSubjects extends AppCompatActivity {
         thirdGrade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                supjectsListener.accept(0);
+                if (subjectsList.getVisibility() == View.GONE){
+                    subjectsList.setVisibility(View.GONE);
+                }
+
                 selectedGrade = "3";
                 attendanceSubjectsAdapter.stopListening();
                 attendanceSubjectsAdapter = null;
@@ -148,6 +170,35 @@ public class ShowAttendanteSubjects extends AppCompatActivity {
                 secondGrade.setTextColor(Color.WHITE);
                 thirdGrade.setBackground(ContextCompat.getDrawable(ShowAttendanteSubjects.this , R.drawable.button_white_rounded_shabe));
                 thirdGrade.setTextColor(Color.BLACK);
+            }
+        });
+
+        supjectsListener.subscribe(new Observer() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                bag.add(d);
+            }
+
+            @Override
+            public void onNext(Object o) {
+                //Log.v("StudentRelay" , o.toString());
+                int exists = Integer.valueOf(o.toString());
+                if (exists == 0){
+                    //Log.v("StudentRelay" , "no");
+                    emptyMess.setVisibility(View.VISIBLE);
+                } else {
+                    emptyMess.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
             }
         });
 

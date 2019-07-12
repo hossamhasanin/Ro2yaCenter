@@ -31,10 +31,10 @@ public class ShowAvailableSubjectsAdapter extends FirebaseRecyclerAdapter<Subjec
      *
      * @param options
      */
-    Activity context;
+    ShowMonthlySubjects context;
     String selectedGrade;
     DatabaseReference reference;
-    public ShowAvailableSubjectsAdapter(@NonNull FirebaseRecyclerOptions<SubjectModel> options , Activity context , String selectedGrade) {
+    public ShowAvailableSubjectsAdapter(@NonNull FirebaseRecyclerOptions<SubjectModel> options , ShowMonthlySubjects context , String selectedGrade) {
         super(options);
         this.context = context;
         this.selectedGrade = selectedGrade;
