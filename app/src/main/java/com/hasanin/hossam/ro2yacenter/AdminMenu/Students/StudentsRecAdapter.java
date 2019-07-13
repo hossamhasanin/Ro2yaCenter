@@ -83,8 +83,8 @@ public class StudentsRecAdapter extends FirebaseRecyclerAdapter<StudentModel , S
             s.add("empty");
             model.setSubjects(s);
         }
+        context.studentListener.accept(model);
         if (!model.isIsadmin() && !model.getSubjects().get(0).equals("none") && model.getStudyGrade().equals(selectedGrade)) {
-            context.studentListener.accept(Integer.valueOf(context.studentListener.getValue().toString()) + 1);
             holder.studentName.setText(model.getName());
             holder.studentName.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -226,11 +226,29 @@ public class StudentsRecAdapter extends FirebaseRecyclerAdapter<StudentModel , S
                 }
             });
         } else {
+            //ArrayList k = (ArrayList) context.e;
+//            if (context.e.size() > 1){
+//                context.e.set( 1 , "notexists");
+//            } else {
+//                context.e.add(1 , "notexists");
+//            }
+//            if (position == getItemCount()-1){
+//                if (context.e.size() > 2){
+//                    context.e.set( 2, "completed");
+//                } else {
+//                    context.e.add( 2, "completed");
+//                }
+//            }
+//            context.studentListener.accept(context.e);
             holder.studentContainer.setVisibility(View.GONE);
             holder.studentName.setVisibility(View.GONE);
         }
     }
 
+    @Override
+    public int getItemCount() {
+        return super.getItemCount();
+    }
 
     public AlertDialog.Builder AlertMessage(Activity context , String message , String title , int icon){
         AlertDialog.Builder al = new AlertDialog.Builder(context);

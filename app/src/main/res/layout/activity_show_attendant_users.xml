@@ -5,17 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/attendante_users_list"
+    android:background="@drawable/library"
     tools:context=".AdminMenu.Attendance.Show.ShowAttendantUsers">
 
     <include
         layout="@layout/tool_bar"
         android:id="@+id/include2" />
 
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/students_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/include2"
-        android:background="@drawable/library" />
+        android:background="@drawable/library"/>
 
 </RelativeLayout>

@@ -27,10 +27,10 @@ public class AvailableUsersAdapter extends FirebaseRecyclerAdapter<StudentModel 
      *
      * @param options
      */
-    public Activity context;
+    public ShowAvailableUsers context;
     public ArrayList<String> usersCode = new ArrayList<String>();
     public String subject , selectedGrade;
-    public AvailableUsersAdapter(@NonNull FirebaseRecyclerOptions<StudentModel> options , Activity context , String subject , ArrayList<String> usersCode , String selectedGrade) {
+    public AvailableUsersAdapter(@NonNull FirebaseRecyclerOptions<StudentModel> options , ShowAvailableUsers context , String subject , ArrayList<String> usersCode , String selectedGrade) {
         super(options);
         this.context = context;
         this.subject = subject;
@@ -53,6 +53,7 @@ public class AvailableUsersAdapter extends FirebaseRecyclerAdapter<StudentModel 
             s.add("empty");
             model.setSubjects(s);
         }
+        context.studentListener.accept(model);
         if (model.getSubjects().contains(subject) && model.getStudyGrade().equals(selectedGrade)) {
             if (usersCode == null){
                 usersCode = new ArrayList<>();

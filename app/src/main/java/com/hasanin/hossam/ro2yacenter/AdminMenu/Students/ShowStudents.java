@@ -42,10 +42,13 @@ import com.jakewharton.rxrelay2.BehaviorRelay;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.subjects.BehaviorSubject;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ShowStudents extends AppCompatActivity {
@@ -76,8 +79,9 @@ public class ShowStudents extends AppCompatActivity {
             };
     String selectedGrade = "1";
 
-    BehaviorRelay studentListener = BehaviorRelay.createDefault(0);
+    BehaviorRelay studentListener = BehaviorRelay.create();
     CompositeDisposable bag = new CompositeDisposable();
+    int c = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,10 +144,12 @@ public class ShowStudents extends AppCompatActivity {
         firstGrade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                studentListener.accept(0);
-                if (studentsList.getVisibility() == View.GONE){
-                    emptyMessError.setVisibility(View.GONE);
-                }
+//                studentListener.accept(0);
+//                if (studentsList.getVisibility() == View.GONE){
+//                    emptyMessError.setVisibility(View.GONE);
+//                }
+
+                c = 0;
 
                 selectedGrade = "1";
                 studentsRecAdapter.stopListening();
@@ -165,10 +171,12 @@ public class ShowStudents extends AppCompatActivity {
         secondGrade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                studentListener.accept(0);
-                if (studentsList.getVisibility() == View.GONE){
-                    emptyMessError.setVisibility(View.GONE);
-                }
+//                studentListener.accept(0);
+//                if (studentsList.getVisibility() == View.GONE){
+//                    emptyMessError.setVisibility(View.GONE);
+//                }
+
+                c = 0;
 
                 selectedGrade = "2";
                 studentsRecAdapter.stopListening();
@@ -191,10 +199,12 @@ public class ShowStudents extends AppCompatActivity {
         thirdGrade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                studentListener.accept(0);
-                if (studentsList.getVisibility() == View.GONE){
-                    emptyMessError.setVisibility(View.GONE);
-                }
+//                studentListener.accept(0);
+//                if (studentsList.getVisibility() == View.GONE){
+//                    emptyMessError.setVisibility(View.GONE);
+//                }
+
+                c = 0;
 
                 selectedGrade = "3";
                 studentsRecAdapter.stopListening();
@@ -309,13 +319,29 @@ public class ShowStudents extends AppCompatActivity {
 
             @Override
             public void onNext(Object o) {
-                //Log.v("StudentRelay" , o.toString());
-                int exists = Integer.valueOf(o.toString());
-                if (exists == 0){
-                    //Log.v("StudentRelay" , "no");
-                    emptyMessError.setVisibility(View.VISIBLE);
-                } else {
-                    emptyMessError.setVisibility(View.GONE);
+                try {
+                    if (o != null) {
+                        StudentModel studentModel = (StudentModel) o;
+                        if (studentModel.isIsadmin() || studentModel.getSubjects().get(0).equals("none") || !studentModel.getStudyGrade().equals(selectedGrade)) {
+                            c += 1;
+                        }
+
+                        Log.v("StudentRelay", "c = " + c);
+
+                        if (c == studentsRecAdapter.getItemCount()) {
+                            Log.v("StudentRelay", "not exists");
+                            if (emptyMessError.getVisibility() == View.GONE) {
+                                emptyMessError.setVisibility(View.VISIBLE);
+                            }
+                        } else {
+                            Log.v("StudentRelay", "exists");
+                            if (emptyMessError.getVisibility() == View.VISIBLE) {
+                                emptyMessError.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                } catch (NullPointerException e){
+                    Log.v("StudentRelay", "Error => " + e.getMessage());
                 }
             }
 

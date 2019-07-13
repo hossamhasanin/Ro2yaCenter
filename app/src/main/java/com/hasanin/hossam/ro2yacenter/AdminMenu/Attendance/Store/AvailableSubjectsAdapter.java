@@ -101,14 +101,7 @@ public class AvailableSubjectsAdapter extends FirebaseRecyclerAdapter<SubjectMod
                                                 }
                                                 if (subjects.contains(model.getSubjectName())) {
                                                     progressDialog.dismiss();
-                                                    Intent intent = new Intent(context, ShowAvailableUsers.class);
-                                                    Bundle bundle = new Bundle();
-                                                    bundle.putString("subjectsName", model.getSubjectName());
-                                                    bundle.putString("subjectId", model.getSubjectId());
-                                                    bundle.putString("selectedGrade", selectedGrade);
-                                                    bundle.putStringArrayList("usersCode", usersCode);
-                                                    intent.putExtras(bundle);
-                                                    context.startActivity(intent);
+                                                    moveToAvailableUsers(model.getSubjectName() , model.getSubjectId() , usersCode);
                                                     break;
                                                 }
                                             }
@@ -132,14 +125,7 @@ public class AvailableSubjectsAdapter extends FirebaseRecyclerAdapter<SubjectMod
                                             }
                                             if (subjects.contains(model.getSubjectName())) {
                                                 progressDialog.dismiss();
-                                                Intent intent = new Intent(context, ShowAvailableUsers.class);
-                                                Bundle bundle = new Bundle();
-                                                bundle.putString("subjectsName", model.getSubjectName());
-                                                bundle.putString("subjectId", model.getSubjectId());
-                                                bundle.putString("selectedGrade", selectedGrade);
-                                                bundle.putStringArrayList("usersCode", new ArrayList<String>());
-                                                intent.putExtras(bundle);
-                                                context.startActivity(intent);
+                                                moveToAvailableUsers(model.getSubjectName() , model.getSubjectId() , new ArrayList());
                                             }
                                         }
                                     }
@@ -158,12 +144,25 @@ public class AvailableSubjectsAdapter extends FirebaseRecyclerAdapter<SubjectMod
 
                         }
                     });
+
+                    progressDialog.dismiss();
                 }
             });
         } else {
             holder.subjectContainer.setVisibility(View.GONE);
             holder.subjectName.setVisibility(View.GONE);
         }
+    }
+
+    public void moveToAvailableUsers(String subjectName , String subjectId , ArrayList usersCode){
+        Intent intent = new Intent(context, ShowAvailableUsers.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("subjectsName", subjectName);
+        bundle.putString("subjectId", subjectId);
+        bundle.putString("selectedGrade", selectedGrade);
+        bundle.putStringArrayList("usersCode", usersCode);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
     }
 
     public static class SubjectHolder extends RecyclerView.ViewHolder{
