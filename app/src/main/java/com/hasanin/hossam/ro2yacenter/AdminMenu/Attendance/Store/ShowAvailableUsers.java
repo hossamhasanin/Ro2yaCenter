@@ -41,7 +41,6 @@ public class ShowAvailableUsers extends AppCompatActivity {
 
     Bundle bundle;
     RecyclerView availableUsersList;
-    TextView emptyMessError;
     AvailableUsersAdapter availableUsersAdapter;
     String subjectName;
     String subjectId , selectedGrade;
@@ -54,6 +53,7 @@ public class ShowAvailableUsers extends AppCompatActivity {
     int currentYear;
     int currentDayOfMonth;
     String fullDate;
+    TextView emptyMessError;
     BehaviorRelay studentListener = BehaviorRelay.create();
     CompositeDisposable bag = new CompositeDisposable();
     int c = 0;
@@ -159,7 +159,7 @@ public class ShowAvailableUsers extends AppCompatActivity {
         if (id == R.id.save_done){
             reference = FirebaseDatabase.getInstance().getReference().child("attendance");
             //recordedId = reference.child(subjectName).push().getKey();
-            if (usersCode.size() != 0){
+            if (usersCode.size() != 0 || availableUsersAdapter.usersCode.size() != 0){
                 AttendanceModel attendanceModel = new AttendanceModel(subjectName , currentMonth , currentYear , date.getTime() , currentDay , availableUsersAdapter.getUsersCode());
                 reference.child(subjectId).child(fullDate).setValue(attendanceModel);
                 Toast.makeText(getApplicationContext() , "تم تسجيل الحاضريين" , Toast.LENGTH_LONG).show();

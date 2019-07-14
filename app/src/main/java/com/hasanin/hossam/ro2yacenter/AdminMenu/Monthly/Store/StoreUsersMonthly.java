@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,12 +25,16 @@ import com.google.firebase.database.ValueEventListener;
 import com.hasanin.hossam.ro2yacenter.AdminMenu.Monthly.MonthlyModel;
 import com.hasanin.hossam.ro2yacenter.AdminMenu.Students.StudentModel;
 import com.hasanin.hossam.ro2yacenter.R;
+import com.jakewharton.rxrelay2.BehaviorRelay;
 
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.Date;
 
+import io.reactivex.Observer;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class StoreUsersMonthly extends AppCompatActivity {
@@ -50,6 +55,9 @@ public class StoreUsersMonthly extends AppCompatActivity {
     int currentYear;
     int currentDayOfMonth;
     String partDate;
+    BehaviorRelay studentListener = BehaviorRelay.create();
+    CompositeDisposable bag = new CompositeDisposable();
+    int c = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +116,55 @@ public class StoreUsersMonthly extends AppCompatActivity {
             }
         });
 
+
+        studentListener.subscribe(new Observer() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                bag.add(d);
+            }
+
+            @Override
+            public void onNext(Object o) {
+                try {
+                    if (o != null) {
+                        StudentModel studentModel = (StudentModel) o;
+                        if (studentModel.isIsadmin() || studentModel.getSubjects().get(0).equals("none") || !studentModel.getStudyGrade().equals(selectedGrade)) {
+                            c += 1;
+                        }
+
+                        Log.v("StudentRelay", "c = " + c);
+
+                        if (c == storePaidUsersAdapter.getItemCount()) {
+                            Log.v("StudentRelay", "not exists");
+                            if (emptyMess.getVisibility() == View.GONE) {
+                                availableUsersList.setVisibility(View.GONE);
+                                emptyMess.setVisibility(View.VISIBLE);
+                            }
+                        } else {
+                            Log.v("StudentRelay", "exists");
+                            if (emptyMess.getVisibility() == View.VISIBLE) {
+                                emptyMess.setVisibility(View.GONE);
+                                availableUsersList.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }
+                } catch (NullPointerException e){
+                    //Log.v("StudentRelay", "Error => " + e.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+
+
     }
 
     @Override
@@ -122,9 +179,13 @@ public class StoreUsersMonthly extends AppCompatActivity {
         if (id == R.id.save_done){
             reference = FirebaseDatabase.getInstance().getReference().child("monthly");
             //recordedId = reference.child(subjectName).push().getKey();
-            MonthlyModel monthlyModel = new MonthlyModel(subjectName , currentMonth , currentYear , storePaidUsersAdapter.getSelectedUsers());
-            reference.child(subjectId).child(partDate).setValue(monthlyModel);
-            Toast.makeText(getApplicationContext() , "تم تسجيل الشهريات المدفوعة" , Toast.LENGTH_LONG).show();
+            if (usersCode.size() != 0 || storePaidUsersAdapter.getSelectedUsers().size() != 0) {
+                MonthlyModel monthlyModel = new MonthlyModel(subjectName, currentMonth, currentYear, storePaidUsersAdapter.getSelectedUsers());
+                reference.child(subjectId).child(partDate).setValue(monthlyModel);
+                Toast.makeText(getApplicationContext(), "تم تسجيل الشهريات المدفوعة", Toast.LENGTH_LONG).show();
+            }  else {
+                Toast.makeText(getApplicationContext() , "مفيش طلاب دلوقتي" , Toast.LENGTH_LONG).show();
+            }
         }
         return super.onOptionsItemSelected(item);
     }

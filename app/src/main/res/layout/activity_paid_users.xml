@@ -4,11 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/library"
     tools:context=".AdminMenu.Monthly.Show.PaidUsers">
 
     <include
         layout="@layout/tool_bar"
         android:id="@+id/include2" />
+
+    <TextView
+        android:id="@+id/empty_mess_error_students"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:background="@drawable/editext_radious_shabe"
+        android:padding="6dp"
+        android:gravity="center"
+        android:text="لا يوجد طلاب"
+        android:visibility="gone"
+        android:textColor="@color/dark"
+        android:textSize="20sp" />
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"

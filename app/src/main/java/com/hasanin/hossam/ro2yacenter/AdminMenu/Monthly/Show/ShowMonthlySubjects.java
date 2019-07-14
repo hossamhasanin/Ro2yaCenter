@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -20,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.hasanin.hossam.ro2yacenter.AdminMenu.Monthly.Store.MonthlyAvailableSubjectsAdapter;
 import com.hasanin.hossam.ro2yacenter.AdminMenu.Monthly.Store.StoreMonthly;
+import com.hasanin.hossam.ro2yacenter.AdminMenu.Students.StudentModel;
 import com.hasanin.hossam.ro2yacenter.AdminMenu.Subjects.SubjectModel;
 import com.hasanin.hossam.ro2yacenter.Helper;
 import com.hasanin.hossam.ro2yacenter.R;
@@ -38,6 +40,10 @@ public class ShowMonthlySubjects extends AppCompatActivity {
     ShowAvailableSubjectsAdapter showAvailableSubjectsAdapter;
     Button firstGrade , thirdGrade , secondGrade;
     String selectedGrade = "1";
+    TextView emptyMessError;
+    BehaviorRelay supjectListener = BehaviorRelay.create();
+    CompositeDisposable bag = new CompositeDisposable();
+    int c = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +53,8 @@ public class ShowMonthlySubjects extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_backword_white);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        emptyMessError = (TextView) findViewById(R.id.empty_mess_error_students);
 
         availableSubjectsList = (RecyclerView) findViewById(R.id.show_available_subjects);
         query = FirebaseDatabase.getInstance().getReference().child("subjects");
@@ -65,6 +73,8 @@ public class ShowMonthlySubjects extends AppCompatActivity {
         firstGrade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                c = 0;
+
                 selectedGrade = "1";
                 showAvailableSubjectsAdapter.stopListening();
                 showAvailableSubjectsAdapter = null;
@@ -85,6 +95,8 @@ public class ShowMonthlySubjects extends AppCompatActivity {
         secondGrade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                c = 0;
+
                 selectedGrade = "2";
                 showAvailableSubjectsAdapter.stopListening();
                 showAvailableSubjectsAdapter = null;
@@ -106,6 +118,8 @@ public class ShowMonthlySubjects extends AppCompatActivity {
         thirdGrade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                c = 0;
+
                 selectedGrade = "3";
                 showAvailableSubjectsAdapter.stopListening();
                 showAvailableSubjectsAdapter = null;
@@ -122,6 +136,52 @@ public class ShowMonthlySubjects extends AppCompatActivity {
                 thirdGrade.setTextColor(Color.BLACK);
             }
         });
+
+        supjectListener.subscribe(new Observer() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                bag.add(d);
+            }
+
+            @Override
+            public void onNext(Object o) {
+                try {
+                    if (o != null) {
+                        SubjectModel studentModel = (SubjectModel) o;
+                        if (!studentModel.getStudyGrade().equals(selectedGrade)) {
+                            c += 1;
+                        }
+
+                        Log.v("StudentRelay", "c = " + c);
+
+                        if (c == showAvailableSubjectsAdapter.getItemCount()) {
+                            Log.v("StudentRelay", "not exists");
+                            if (emptyMessError.getVisibility() == View.GONE) {
+                                emptyMessError.setVisibility(View.VISIBLE);
+                            }
+                        } else {
+                            Log.v("StudentRelay", "exists");
+                            if (emptyMessError.getVisibility() == View.VISIBLE) {
+                                emptyMessError.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                } catch (NullPointerException e){
+                    Log.v("StudentRelay", "Error => " + e.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+
 
     }
 

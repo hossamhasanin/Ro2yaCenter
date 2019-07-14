@@ -35,9 +35,9 @@ public class PaidUsersAdapter extends FirebaseRecyclerAdapter<StudentModel , Pai
      *
      * @param options
      */
-    Activity context;
+    PaidUsers context;
     String subjectName , partDate , selectedGrade , subjectId;
-    public PaidUsersAdapter(@NonNull FirebaseRecyclerOptions<StudentModel> options , Activity context , String subjectName , String partDate , String selectedGrade , String subjectId) {
+    public PaidUsersAdapter(@NonNull FirebaseRecyclerOptions<StudentModel> options , PaidUsers context , String subjectName , String partDate , String selectedGrade , String subjectId) {
         super(options);
         this.context = context;
         this.subjectName = subjectName;
@@ -59,6 +59,7 @@ public class PaidUsersAdapter extends FirebaseRecyclerAdapter<StudentModel , Pai
     ArrayList<String> paidUsers;
     @Override
     protected void onBindViewHolder(@NonNull final StudentHolder holder, int position, @NonNull final StudentModel model) {
+        context.studentListener.accept(model);
         if (model.getSubjects().contains(subjectName) && model.getStudyGrade().equals(selectedGrade)) {
             paidUsers = new ArrayList<String>();
             holder.studentName.setText(model.getName());

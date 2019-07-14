@@ -71,6 +71,8 @@ public class ShowAvailableSubjectsAdapter extends FirebaseRecyclerAdapter<Subjec
                                 context.startActivity(intent);
                             }
                         });
+                    } else {
+                        context.supjectListener.accept(model);
                     }
                 }
 
@@ -80,6 +82,7 @@ public class ShowAvailableSubjectsAdapter extends FirebaseRecyclerAdapter<Subjec
                 }
             });
         } else {
+            context.supjectListener.accept(model);
             holder.subjectContainer.setVisibility(View.GONE);
             holder.subjectName.setVisibility(View.GONE);
         }

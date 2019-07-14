@@ -1,6 +1,8 @@
 package com.hasanin.hossam.ro2yacenter.AdminMenu.Monthly.Store;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +15,12 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.hasanin.hossam.ro2yacenter.AdminMenu.Attendance.Store.AttendanceModel;
 import com.hasanin.hossam.ro2yacenter.AdminMenu.Students.StudentModel;
 import com.hasanin.hossam.ro2yacenter.R;
 
@@ -26,11 +34,11 @@ public class StorePaidUsersAdapter extends FirebaseRecyclerAdapter<StudentModel 
      *
      * @param options
      */
-    Activity context;
+    StoreUsersMonthly context;
     String subjectName;
     ArrayList<String> selectedUsers;
     String selectedGrade;
-    public StorePaidUsersAdapter(@NonNull FirebaseRecyclerOptions<StudentModel> options , Activity context , String subjectName , ArrayList<String> selectedUsers , String selectedGrade) {
+    public StorePaidUsersAdapter(@NonNull FirebaseRecyclerOptions<StudentModel> options , StoreUsersMonthly context , String subjectName , ArrayList<String> selectedUsers , String selectedGrade) {
         super(options);
         this.context = context;
         this.subjectName = subjectName;
@@ -47,7 +55,8 @@ public class StorePaidUsersAdapter extends FirebaseRecyclerAdapter<StudentModel 
     }
     ArrayList<String> existedUsers = new ArrayList<String>();
     @Override
-    protected void onBindViewHolder(@NonNull final UserViewHolder holder, int position, @NonNull final StudentModel model) {
+    protected void onBindViewHolder(@NonNull final UserViewHolder holder, final int position, @NonNull final StudentModel model) {
+        context.studentListener.accept(model);
         if (model.getSubjects().contains(subjectName) && model.getStudyGrade().equals(selectedGrade)){
             existedUsers.add(model.getCode());
             if (selectedUsers == null){
@@ -61,16 +70,41 @@ public class StorePaidUsersAdapter extends FirebaseRecyclerAdapter<StudentModel 
                 }
             }
             holder.user.setText(model.getName());
+
             holder.userContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (holder.selectUser.isChecked()){
-                        holder.selectUser.setChecked(false);
-                    } else {
-                        holder.selectUser.setChecked(true);
-                    }
+                    final ProgressDialog progressDialog = new ProgressDialog(context);
+                    progressDialog.setMessage("انتظر يتم حسب عدد ايام الحضور ...");
+                    progressDialog.show();
+
+                    DatabaseReference attendance = FirebaseDatabase.getInstance().getReference().child("attendance");
+                    attendance.child(context.subjectId).addListenerForSingleValueEvent(new ValueEventListener() {@Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            int attendedDays = 0;
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                                AttendanceModel attendance = snapshot.getValue(AttendanceModel.class);
+                                if (attendance.getMonth() == context.currentMonth && attendance.getAttendantStudents().contains(model.getCode())){
+                                    attendedDays += 1;
+                                }
+                            }
+                            if (progressDialog.isShowing()){
+                                progressDialog.dismiss();
+                            }
+                            AlertDialog.Builder popupMess = new AlertDialog.Builder(context);
+                            popupMess.setMessage("عدد ايام الحضور في هذا الشهر " + attendedDays);
+                            popupMess.create();
+                            popupMess.show();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
                 }
             });
+
             holder.selectUser.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -86,11 +120,6 @@ public class StorePaidUsersAdapter extends FirebaseRecyclerAdapter<StudentModel 
             holder.user.setVisibility(View.GONE);
             holder.selectUser.setVisibility(View.GONE);
         }
-//        if (getItemCount() != 0){
-//            availableUsersList.setVisibility(View.VISIBLE);
-//            emptyMess.setVisibility(View.GONE);
-//            usersContainer.setBackground(null);
-//        }
     }
 
     public int getExistedUsersCount(){
