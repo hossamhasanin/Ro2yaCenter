@@ -49,7 +49,7 @@ public class ShowAttendantUsers extends AppCompatActivity {
         toolbar.setNavigationIcon(R.drawable.ic_backword_white);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        emptyMessError = (TextView) findViewById(R.id.empty_mess_error_students);
+        emptyMessError = (TextView) findViewById(R.id.empty_mess_error);
 
         bundle = getIntent().getExtras();
         getSupportActionBar().setTitle(bundle.getString("record"));

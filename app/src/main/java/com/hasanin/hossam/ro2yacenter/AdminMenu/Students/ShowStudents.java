@@ -1,6 +1,5 @@
 package com.hasanin.hossam.ro2yacenter.AdminMenu.Students;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
@@ -19,13 +18,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,22 +29,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.hasanin.hossam.ro2yacenter.AdminMenu.Subjects.AddSubject;
-import com.hasanin.hossam.ro2yacenter.AdminMenu.Subjects.SubjectModel;
-import com.hasanin.hossam.ro2yacenter.AdminMenu.Subjects.SubjectsRecAdapter;
 import com.hasanin.hossam.ro2yacenter.Helper;
 import com.hasanin.hossam.ro2yacenter.R;
 import com.jakewharton.rxrelay2.BehaviorRelay;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.subjects.BehaviorSubject;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ShowStudents extends AppCompatActivity {
@@ -290,7 +279,7 @@ public class ShowStudents extends AppCompatActivity {
         });
 
         studentListContainer = (RelativeLayout) findViewById(R.id.student_list_container);
-        emptyMessError = (TextView) findViewById(R.id.empty_mess_error_students);
+        emptyMessError = (TextView) findViewById(R.id.empty_mess_error);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

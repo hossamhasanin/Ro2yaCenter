@@ -1,7 +1,6 @@
 package com.hasanin.hossam.ro2yacenter.AdminMenu.Monthly.Show;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,7 +15,6 @@ import android.widget.TextView;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.hasanin.hossam.ro2yacenter.AdminMenu.AdminMenuActivity;
 import com.hasanin.hossam.ro2yacenter.AdminMenu.Students.StudentModel;
 import com.hasanin.hossam.ro2yacenter.Helper;
 import com.hasanin.hossam.ro2yacenter.R;
@@ -57,7 +55,7 @@ public class PaidUsers extends AppCompatActivity {
         int currentYear = new DateTime(new Date().getTime()).getYear();
         String partDate = String.valueOf(currentMonth)+"-"+String.valueOf(currentYear);
 
-        emptyMessError = (TextView) findViewById(R.id.empty_mess_error_students);
+        emptyMessError = (TextView) findViewById(R.id.empty_mess_error);
 
         availableUsersList = (RecyclerView) findViewById(R.id.available_users);
         query = FirebaseDatabase.getInstance().getReference().child("members");

@@ -89,7 +89,7 @@ public class StoreUsersMonthly extends AppCompatActivity {
         usersCode = new ArrayList<String>();
 
         availableUsersList = (RecyclerView) findViewById(R.id.available_users);
-        emptyMess = (TextView) findViewById(R.id.empty_mess_error_students);
+        emptyMess = (TextView) findViewById(R.id.empty_mess_error);
         usersContainer = (RelativeLayout) findViewById(R.id.users_container);
 
         Query query = FirebaseDatabase.getInstance().getReference("members");

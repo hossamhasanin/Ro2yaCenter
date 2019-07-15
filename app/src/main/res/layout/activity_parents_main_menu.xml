@@ -72,6 +72,27 @@
         app:layout_constraintTop_toBottomOf="@+id/student_grade"
         tools:text="الكود" />
 
+    <TextView
+        android:id="@+id/empty_mess_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="104dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/editext_radious_shabe"
+        android:gravity="center"
+        android:padding="6dp"
+        android:text="لا يوجد طلاب"
+        android:textColor="@color/dark"
+        android:textSize="18sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline2"
+        app:layout_constraintVertical_bias="0.026" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/lists_container"
         android:layout_width="0dp"

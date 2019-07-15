@@ -14,14 +14,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.hasanin.hossam.ro2yacenter.AdminMenu.Monthly.Store.MonthlyAvailableSubjectsAdapter;
-import com.hasanin.hossam.ro2yacenter.AdminMenu.Monthly.Store.StoreMonthly;
-import com.hasanin.hossam.ro2yacenter.AdminMenu.Students.StudentModel;
 import com.hasanin.hossam.ro2yacenter.AdminMenu.Subjects.SubjectModel;
 import com.hasanin.hossam.ro2yacenter.Helper;
 import com.hasanin.hossam.ro2yacenter.R;
@@ -54,7 +50,7 @@ public class ShowMonthlySubjects extends AppCompatActivity {
         toolbar.setNavigationIcon(R.drawable.ic_backword_white);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        emptyMessError = (TextView) findViewById(R.id.empty_mess_error_students);
+        emptyMessError = (TextView) findViewById(R.id.empty_mess_error);
 
         availableSubjectsList = (RecyclerView) findViewById(R.id.show_available_subjects);
         query = FirebaseDatabase.getInstance().getReference().child("subjects");

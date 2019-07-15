@@ -1,7 +1,6 @@
 package com.hasanin.hossam.ro2yacenter.AdminMenu.Attendance.Store;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,13 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.hasanin.hossam.ro2yacenter.AdminMenu.Attendance.Store.AvailableUsersAdapter;
 import com.hasanin.hossam.ro2yacenter.AdminMenu.Students.StudentModel;
 import com.hasanin.hossam.ro2yacenter.R;
 import com.jakewharton.rxrelay2.BehaviorRelay;
@@ -30,7 +25,6 @@ import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
@@ -77,7 +71,7 @@ public class ShowAvailableUsers extends AppCompatActivity {
         selectedGrade = bundle.getString("selectedGrade");
         usersCode = bundle.getStringArrayList("usersCode");
 
-        emptyMessError = (TextView) findViewById(R.id.empty_mess_error_students);
+        emptyMessError = (TextView) findViewById(R.id.empty_mess_error);
 
 
         date = new Date();
@@ -160,7 +154,7 @@ public class ShowAvailableUsers extends AppCompatActivity {
             reference = FirebaseDatabase.getInstance().getReference().child("attendance");
             //recordedId = reference.child(subjectName).push().getKey();
             if (usersCode.size() != 0 || availableUsersAdapter.usersCode.size() != 0){
-                AttendanceModel attendanceModel = new AttendanceModel(subjectName , currentMonth , currentYear , date.getTime() , currentDay , availableUsersAdapter.getUsersCode());
+                AttendanceModel attendanceModel = new AttendanceModel(subjectName , currentMonth , currentYear , date.getTime() , currentDayOfMonth , availableUsersAdapter.getUsersCode());
                 reference.child(subjectId).child(fullDate).setValue(attendanceModel);
                 Toast.makeText(getApplicationContext() , "تم تسجيل الحاضريين" , Toast.LENGTH_LONG).show();
             } else {

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,19 +18,25 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.hasanin.hossam.ro2yacenter.AdminMenu.Attendance.Store.AttendanceModel;
+import com.hasanin.hossam.ro2yacenter.AdminMenu.Monthly.MonthlyModel;
 import com.hasanin.hossam.ro2yacenter.AdminMenu.Subjects.SubjectModel;
 import com.hasanin.hossam.ro2yacenter.Helper;
 import com.hasanin.hossam.ro2yacenter.R;
+import com.jakewharton.rxrelay2.BehaviorRelay;
 
 import java.util.ArrayList;
 
+import io.reactivex.Observer;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ParentsMainMenu extends AppCompatActivity {
 
     RecyclerView containerList;
     Button attendance , monthly , subjects;
-    TextView name , studyGrade , code;
+    TextView name , studyGrade , code , emptyMessError;
     String selectedGrade , studentName , studentCode;
     ArrayList<String> studentSubjects;
     Bundle bundle;
@@ -38,6 +45,12 @@ public class ParentsMainMenu extends AppCompatActivity {
     FirebaseRecyclerOptions firebaseRecyclerOptions;
     Query query;
     Toolbar toolbar;
+
+    BehaviorRelay emptinessListener = BehaviorRelay.create();
+    CompositeDisposable bag = new CompositeDisposable();
+    int c = 0;
+    String modelRunning = "subjects";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +72,7 @@ public class ParentsMainMenu extends AppCompatActivity {
         name = findViewById(R.id.student_name);
         studyGrade = findViewById(R.id.student_grade);
         code = findViewById(R.id.student_code);
+        emptyMessError = findViewById(R.id.empty_mess_error);
 
         name.setText(studentName);
         code.setText(studentCode);
@@ -75,6 +89,9 @@ public class ParentsMainMenu extends AppCompatActivity {
         subjects.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                modelRunning = "subjects";
+                c = 0;
+
                 toolbar.setNavigationIcon(R.drawable.ic_backword_white);
                 toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                     @Override
@@ -84,6 +101,9 @@ public class ParentsMainMenu extends AppCompatActivity {
                 subjects.setVisibility(View.GONE);
                 attendance.setVisibility(View.GONE);
                 monthly.setVisibility(View.GONE);
+                if (emptyMessError.getVisibility() == View.VISIBLE){
+                    emptyMessError.setVisibility(View.GONE);
+                }
                 containerList.setVisibility(View.VISIBLE);
 
                 query = databaseReference.child("subjects");
@@ -100,6 +120,9 @@ public class ParentsMainMenu extends AppCompatActivity {
         attendance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                modelRunning = "subjects";
+                c = 0;
+
                 toolbar.setNavigationIcon(R.drawable.ic_backword_white);
                 toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                     @Override
@@ -109,6 +132,9 @@ public class ParentsMainMenu extends AppCompatActivity {
                 subjects.setVisibility(View.GONE);
                 attendance.setVisibility(View.GONE);
                 monthly.setVisibility(View.GONE);
+                if (emptyMessError.getVisibility() == View.VISIBLE){
+                    emptyMessError.setVisibility(View.GONE);
+                }
                 containerList.setVisibility(View.VISIBLE);
 
                 query = databaseReference.child("subjects");
@@ -125,6 +151,9 @@ public class ParentsMainMenu extends AppCompatActivity {
         monthly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                modelRunning = "subjects";
+                c = 0;
+
                 toolbar.setNavigationIcon(R.drawable.ic_backword_white);
                 toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                     @Override
@@ -134,6 +163,9 @@ public class ParentsMainMenu extends AppCompatActivity {
                 subjects.setVisibility(View.GONE);
                 attendance.setVisibility(View.GONE);
                 monthly.setVisibility(View.GONE);
+                if (emptyMessError.getVisibility() == View.VISIBLE){
+                    emptyMessError.setVisibility(View.GONE);
+                }
                 containerList.setVisibility(View.VISIBLE);
 
                 query = databaseReference.child("subjects");
@@ -144,6 +176,74 @@ public class ParentsMainMenu extends AppCompatActivity {
                 containerList.setAdapter(containerListAdapter);
                 containerList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                 containerListAdapter.startListening();
+            }
+        });
+
+        emptinessListener.subscribe(new Observer() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                bag.add(d);
+            }
+
+            @Override
+            public void onNext(Object o) {
+                if (modelRunning.equals("subjects")){
+                    SubjectModel subjectModel = (SubjectModel) o;
+                    if (!studentSubjects.contains(subjectModel.getSubjectName()) && !subjectModel.getStudyGrade().contains(selectedGrade)){
+                        c += 1;
+                    }
+
+                    if (c == containerListAdapter.getItemCount()){
+                        // No subjects
+                        Log.v("ParentsRelay" , "not exists");
+                        emptyMessError.setText("لا يوجد مواد مسجلة يرجى الرجوع لادارة السنتر");
+                        emptyMessError.setVisibility(View.VISIBLE);
+                    } else {
+                        // there is subjects
+                        Log.v("ParentsRelay" , "exists");
+                        emptyMessError.setVisibility(View.GONE);
+                    }
+                } else if (modelRunning.equals("attendance")){
+                    AttendanceModel attendanceModel = (AttendanceModel) o;
+                    if (!attendanceModel.getAttendantStudents().contains(studentCode)){
+                        c += 1;
+                    }
+
+                    if (c == containerListAdapter.getItemCount()){
+                        // Not found
+                        emptyMessError.setText("لا يوجد حضور");
+                        emptyMessError.setVisibility(View.VISIBLE);
+                    } else {
+                        // found
+                        emptyMessError.setVisibility(View.GONE);
+                    }
+                } else if (modelRunning.equals("monthly")){
+                    MonthlyModel monthlyModel = (MonthlyModel) o;
+                    if (!monthlyModel.getUsersCode().contains(studentCode)){
+                        c += 1;
+                    }
+
+                    if (c == containerListAdapter.getItemCount()){
+                        // Not found
+                        Log.v("ParentsRelay" , "not exists monthly");
+                        emptyMessError.setText("لا يوجد اي شهريات مدفوعة");
+                        emptyMessError.setVisibility(View.VISIBLE);
+                    } else {
+                        // found
+                        Log.v("ParentsRelay" , "exists");
+                        emptyMessError.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
             }
         });
 
@@ -167,6 +267,9 @@ public class ParentsMainMenu extends AppCompatActivity {
             containerListAdapter = null;
 
             toolbar.setNavigationIcon(null);
+            if (emptyMessError.getVisibility() == View.VISIBLE){
+                emptyMessError.setVisibility(View.GONE);
+            }
             containerList.setVisibility(View.GONE);
             subjects.setVisibility(View.VISIBLE);
             attendance.setVisibility(View.VISIBLE);

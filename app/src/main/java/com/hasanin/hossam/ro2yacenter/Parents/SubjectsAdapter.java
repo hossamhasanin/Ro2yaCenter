@@ -3,6 +3,7 @@ package com.hasanin.hossam.ro2yacenter.Parents;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.Query;
 import com.hasanin.hossam.ro2yacenter.AdminMenu.Attendance.Store.AttendanceModel;
+import com.hasanin.hossam.ro2yacenter.AdminMenu.Monthly.MonthlyModel;
 import com.hasanin.hossam.ro2yacenter.AdminMenu.Subjects.SubjectModel;
 import com.hasanin.hossam.ro2yacenter.AdminMenu.Subjects.SubjectsRecAdapter;
 import com.hasanin.hossam.ro2yacenter.R;
@@ -37,10 +39,11 @@ public class SubjectsAdapter extends FirebaseRecyclerAdapter<SubjectModel , Subj
 
     @Override
     protected void onBindViewHolder(@NonNull SubjectsRecAdapter.SubjectHolder holder, int position, @NonNull final SubjectModel model) {
+        activity.emptinessListener.accept(model);
         if (studentSubjects.contains(model.getSubjectName()) && model.getStudyGrade().contains(studyGrade)) {
 
             holder.subjectName.setText(model.getSubjectName());
-
+            Log.v("subjectsAdabter" , model.getSubjectName());
             if (mode == null){
                 holder.subjectName.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -71,12 +74,13 @@ public class SubjectsAdapter extends FirebaseRecyclerAdapter<SubjectModel , Subj
                 holder.subjectName.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        activity.modelRunning = "attendance";
                         activity.query = activity.databaseReference.child("attendance").child(model.getSubjectId());
                         activity.query.keepSynced(true);
                         activity.firebaseRecyclerOptions =
                                 new FirebaseRecyclerOptions.Builder<AttendanceModel>().setQuery(activity.query , AttendanceModel.class).build();
                         activity.containerListAdapter.stopListening();
-                        activity.containerListAdapter = new AttendanceAdapter(activity.firebaseRecyclerOptions , activity , activity.studentCode);
+                        activity.containerListAdapter = new AttendanceAdapter(activity.firebaseRecyclerOptions , activity , activity.studentCode , "months");
                         activity.containerList.setAdapter(activity.containerListAdapter);
                         activity.containerList.setLayoutManager(new LinearLayoutManager(activity));
                         activity.containerListAdapter.startListening();
@@ -84,10 +88,26 @@ public class SubjectsAdapter extends FirebaseRecyclerAdapter<SubjectModel , Subj
                 });
 
             } else if (mode.equals("monthly")){
-
+                holder.subjectName.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        activity.modelRunning = "monthly";
+                        activity.query = activity.databaseReference.child("monthly").child(model.getSubjectId());
+                        activity.query.keepSynced(true);
+                        activity.firebaseRecyclerOptions =
+                                new FirebaseRecyclerOptions.Builder<MonthlyModel>().setQuery(activity.query , MonthlyModel.class).build();
+                        activity.containerListAdapter.stopListening();
+                        activity.containerListAdapter = new MonthlyAdapter(activity.firebaseRecyclerOptions , activity , activity.studentCode);
+                        activity.containerList.setAdapter(activity.containerListAdapter);
+                        activity.containerList.setLayoutManager(new LinearLayoutManager(activity));
+                        activity.containerListAdapter.startListening();
+                    }
+                });
             }
 
         } else {
+            Log.v("subjectsAdabter" , "don't match");
+
             holder.container.setVisibility(View.GONE);
             holder.subjectName.setVisibility(View.GONE);
         }
