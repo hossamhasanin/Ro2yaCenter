@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -50,7 +51,7 @@ public class LogInActivity extends AppCompatActivity {
     Button returnBack , logIn , adminButton , parentsButtom;
     TextView titleDesc;
     EditText logInCode;
-    RelativeLayout codeContainer;
+    ConstraintLayout codeContainer;
     LinearLayout selectionContainer;
     Animation slideIn , slideOut , fadeIn , fadeOut;
     boolean isAdmin = false;
@@ -111,7 +112,7 @@ public class LogInActivity extends AppCompatActivity {
         parentsButtom = (Button) findViewById(R.id.parentsButton);
         titleDesc = (TextView) findViewById(R.id.titleDesc);
         logInCode = (EditText) findViewById(R.id.code);
-        codeContainer = (RelativeLayout) findViewById(R.id.codeContainer);
+        codeContainer = (ConstraintLayout) findViewById(R.id.codeContainer);
         selectionContainer = (LinearLayout) findViewById(R.id.selectionContainer);
         slideIn = AnimationUtils.loadAnimation(this , android.R.anim.slide_in_left);
         slideOut = AnimationUtils.loadAnimation(this , android.R.anim.slide_out_right);

@@ -201,7 +201,9 @@ public class ParentsMainMenu extends AppCompatActivity {
                     } else {
                         // there is subjects
                         Log.v("ParentsRelay" , "exists");
-                        emptyMessError.setVisibility(View.GONE);
+                        if (emptyMessError.getVisibility() == View.VISIBLE){
+                            emptyMessError.setVisibility(View.GONE);
+                        }
                     }
                 } else if (modelRunning.equals("attendance")){
                     AttendanceModel attendanceModel = (AttendanceModel) o;
@@ -215,7 +217,9 @@ public class ParentsMainMenu extends AppCompatActivity {
                         emptyMessError.setVisibility(View.VISIBLE);
                     } else {
                         // found
-                        emptyMessError.setVisibility(View.GONE);
+                        if (emptyMessError.getVisibility() == View.VISIBLE){
+                            emptyMessError.setVisibility(View.GONE);
+                        }
                     }
                 } else if (modelRunning.equals("monthly")){
                     MonthlyModel monthlyModel = (MonthlyModel) o;
@@ -231,7 +235,9 @@ public class ParentsMainMenu extends AppCompatActivity {
                     } else {
                         // found
                         Log.v("ParentsRelay" , "exists");
-                        emptyMessError.setVisibility(View.GONE);
+                        if (emptyMessError.getVisibility() == View.VISIBLE){
+                            emptyMessError.setVisibility(View.GONE);
+                        }
                     }
                 }
             }

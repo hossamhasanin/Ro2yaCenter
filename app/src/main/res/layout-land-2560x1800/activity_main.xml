@@ -44,9 +44,9 @@
             android:textSize="36sp" />
     </LinearLayout>
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/codeContainer"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -54,7 +54,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.601">
+        app:layout_constraintVertical_bias="0.579">
 
         <TextView
             android:id="@+id/titleDesc"
@@ -62,9 +62,17 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_margin="10dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="8dp"
+            android:drawableLeft="@drawable/admin"
+            android:gravity="center_vertical"
             android:text="الأدارة"
             android:textColor="@color/dark"
-            android:textSize="48sp" />
+            android:textSize="36sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/code"
@@ -73,40 +81,53 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/titleDesc"
             android:layout_centerHorizontal="true"
-            android:layout_marginRight="70dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:hint="أدخل كود الدخول"
             android:padding="6dp"
-            android:textSize="36sp" />
+            android:textSize="36sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleDesc" />
 
         <Button
             android:id="@+id/logIn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/code"
-            android:layout_marginLeft="170dp"
-            android:layout_marginTop="22dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="360dp"
             android:layout_toRightOf="@+id/returnBack"
             android:layout_weight="1"
             android:background="@drawable/buttons_shape_green"
-            android:padding="20dp"
+            android:padding="10dp"
             android:text="دخول"
             android:textColor="@color/white"
-            android:textSize="36sp" />
+            android:textSize="28sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/code" />
 
         <Button
             android:id="@+id/returnBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/code"
-            android:layout_marginLeft="450dp"
-            android:layout_marginTop="22dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="24dp"
+            android:padding="10dp"
             android:layout_weight="1"
             android:background="@drawable/buttons_red_shabe"
-            android:padding="20dp"
             android:text="العودة"
             android:textColor="@color/white"
-            android:textSize="36sp" />
+            android:textSize="28sp"
+            app:layout_constraintEnd_toStartOf="@+id/logIn"
+            app:layout_constraintHorizontal_bias="0.622"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/code" />
 
-    </RelativeLayout>
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

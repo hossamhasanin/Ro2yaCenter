@@ -57,7 +57,7 @@ public class StoreUsersMonthly extends AppCompatActivity {
     String partDate;
     BehaviorRelay studentListener = BehaviorRelay.create();
     CompositeDisposable bag = new CompositeDisposable();
-    int c = 0;
+    int notExists = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,17 +128,19 @@ public class StoreUsersMonthly extends AppCompatActivity {
                 try {
                     if (o != null) {
                         StudentModel studentModel = (StudentModel) o;
-                        if (studentModel.isIsadmin() || studentModel.getSubjects().get(0).equals("none") || !studentModel.getStudyGrade().equals(selectedGrade)) {
-                            c += 1;
+                        if (!studentModel.getSubjects().contains(subjectName) || !studentModel.getStudyGrade().equals(selectedGrade)) {
+                            notExists += 1;
                         }
 
-                        Log.v("StudentRelay", "c = " + c);
 
-                        if (c == storePaidUsersAdapter.getItemCount()) {
+                        Log.v("StudentRelay", "c = " + notExists);
+
+                        if (notExists == storePaidUsersAdapter.getItemCount()) {
+
                             Log.v("StudentRelay", "not exists");
                             if (emptyMess.getVisibility() == View.GONE) {
-                                availableUsersList.setVisibility(View.GONE);
                                 emptyMess.setVisibility(View.VISIBLE);
+                                availableUsersList.setVisibility(View.GONE);
                             }
                         } else {
                             Log.v("StudentRelay", "exists");

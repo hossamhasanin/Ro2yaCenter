@@ -13,13 +13,14 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Parents.ParentsMainMenu"></activity>
+        <activity android:name=".Parents.ParentsMainMenu" android:screenOrientation="portrait"></activity>
         <activity android:name=".LogInActivity" />
-        <activity android:name=".AdminMenu.AdminMenuActivity" />
+        <activity android:name=".AdminMenu.AdminMenuActivity" android:screenOrientation="portrait" />
         <activity
             android:name=".AdminMenu.Subjects.AddSubject"
-            android:parentActivityName=".AdminMenu.Subjects.ShowSubjects" />
-        <activity android:name=".LauncherActivity">
+            android:parentActivityName=".AdminMenu.Subjects.ShowSubjects"
+            android:screenOrientation="portrait" />
+        <activity android:name=".LauncherActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,7 +29,7 @@
         </activity>
         <activity
             android:name=".AdminMenu.Subjects.ShowSubjects"
-            android:parentActivityName=".AdminMenu.AdminMenuActivity">
+            android:parentActivityName=".AdminMenu.AdminMenuActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -43,10 +44,12 @@
         <activity
             android:name=".AdminMenu.Students.AddStudent"
             android:parentActivityName=".AdminMenu.Students.ShowStudents"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".AdminMenu.Students.ShowStudents"
-            android:parentActivityName=".AdminMenu.AdminMenuActivity">
+            android:parentActivityName=".AdminMenu.AdminMenuActivity"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -60,26 +63,30 @@
         </activity>
         <activity
             android:name=".AdminMenu.Attendance.Store.StoreAttendance"
-            android:parentActivityName=".AdminMenu.AdminMenuActivity" />
-        <activity android:name=".AdminMenu.Attendance.Store.ShowAvailableUsers" />
+            android:parentActivityName=".AdminMenu.AdminMenuActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".AdminMenu.Attendance.Store.ShowAvailableUsers" android:screenOrientation="portrait" />
         <activity
             android:name=".AdminMenu.Attendance.Show.ShowAttendanteSubjects"
-            android:parentActivityName=".AdminMenu.AdminMenuActivity" />
+            android:parentActivityName=".AdminMenu.AdminMenuActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".AdminMenu.Attendance.Show.ShowAttendantUsers"
             android:parentActivityName=".AdminMenu.Attendance.Show.ShowAttendanteSubjects" />
         <activity android:name=".AdminMenu.Attendance.Show.ShowAttendanceDates" />
         <activity
             android:name=".AdminMenu.Monthly.Store.StoreMonthly"
-            android:parentActivityName=".AdminMenu.AdminMenuActivity" />
-        <activity android:name=".AdminMenu.Monthly.Show.ShowMonths" />
-        <activity android:name=".AdminMenu.Monthly.Store.StoreUsersMonthly" />
+            android:parentActivityName=".AdminMenu.AdminMenuActivity" android:screenOrientation="portrait" />
+        <activity android:name=".AdminMenu.Monthly.Show.ShowMonths" android:screenOrientation="portrait" />
+        <activity android:name=".AdminMenu.Monthly.Store.StoreUsersMonthly" android:screenOrientation="portrait" />
         <activity
             android:name=".AdminMenu.Monthly.Show.ShowMonthlySubjects"
-            android:parentActivityName=".AdminMenu.AdminMenuActivity" />
+            android:parentActivityName=".AdminMenu.AdminMenuActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".AdminMenu.Monthly.Show.PaidUsers"
-            android:parentActivityName=".AdminMenu.Monthly.Show.ShowMonthlySubjects" />
+            android:parentActivityName=".AdminMenu.Monthly.Show.ShowMonthlySubjects"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

@@ -12,13 +12,6 @@
         layout="@layout/tool_bar"
         android:id="@+id/include2" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/available_users"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/include2"
-        android:background="@drawable/library" />
-
     <TextView
         android:id="@+id/empty_mess_error"
         android:layout_width="match_parent"
@@ -31,5 +24,14 @@
         android:textColor="@color/dark"
         android:textSize="20sp"
         android:visibility="gone"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/available_users"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/include2"
+        android:background="@drawable/library" />
+
+
 
 </RelativeLayout>

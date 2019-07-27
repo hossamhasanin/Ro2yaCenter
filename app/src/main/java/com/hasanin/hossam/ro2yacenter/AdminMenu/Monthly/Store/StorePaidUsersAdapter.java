@@ -119,6 +119,9 @@ public class StorePaidUsersAdapter extends FirebaseRecyclerAdapter<StudentModel 
             holder.userContainer.setVisibility(View.GONE);
             holder.user.setVisibility(View.GONE);
             holder.selectUser.setVisibility(View.GONE);
+//            if (!model.isIsadmin()){
+//                context.studentListener.accept(model);
+//            }
         }
     }
 
