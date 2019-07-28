@@ -128,7 +128,7 @@ public class StoreUsersMonthly extends AppCompatActivity {
                 try {
                     if (o != null) {
                         StudentModel studentModel = (StudentModel) o;
-                        if (!studentModel.getSubjects().contains(subjectName) || !studentModel.getStudyGrade().equals(selectedGrade)) {
+                        if (studentModel.isIsadmin() || studentModel.getSubjects().get(0).equals("none") || !studentModel.getSubjects().contains(subjectName) || !studentModel.getStudyGrade().equals(selectedGrade)) {
                             notExists += 1;
                         }
 

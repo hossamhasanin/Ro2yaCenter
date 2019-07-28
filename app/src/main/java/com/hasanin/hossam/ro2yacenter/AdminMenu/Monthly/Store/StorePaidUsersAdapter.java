@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,8 +57,8 @@ public class StorePaidUsersAdapter extends FirebaseRecyclerAdapter<StudentModel 
     ArrayList<String> existedUsers = new ArrayList<String>();
     @Override
     protected void onBindViewHolder(@NonNull final UserViewHolder holder, final int position, @NonNull final StudentModel model) {
-        context.studentListener.accept(model);
         if (model.getSubjects().contains(subjectName) && model.getStudyGrade().equals(selectedGrade)){
+            context.studentListener.accept(model);
             existedUsers.add(model.getCode());
             if (selectedUsers == null){
                 selectedUsers = new ArrayList<String>();
@@ -119,9 +120,12 @@ public class StorePaidUsersAdapter extends FirebaseRecyclerAdapter<StudentModel 
             holder.userContainer.setVisibility(View.GONE);
             holder.user.setVisibility(View.GONE);
             holder.selectUser.setVisibility(View.GONE);
-//            if (!model.isIsadmin()){
-//                context.studentListener.accept(model);
-//            }
+            if (!model.getSubjects().contains(subjectName)){
+                Log.v("Adapt" , "list" + model.getName());
+            }
+            if (!model.getStudyGrade().equals(selectedGrade)){
+                Log.v("Adapt" , "grade" + model.getName());
+            }
         }
     }
 

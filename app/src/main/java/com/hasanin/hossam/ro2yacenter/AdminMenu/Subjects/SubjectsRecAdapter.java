@@ -192,7 +192,7 @@ public class SubjectsRecAdapter extends FirebaseRecyclerAdapter<SubjectModel , S
             });
         } else {
             holder.container.setVisibility(View.GONE);
-            holder.subjectName.setVisibility(View.VISIBLE);
+            holder.subjectName.setVisibility(View.GONE);
         }
 
     }
